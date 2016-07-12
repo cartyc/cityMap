@@ -4,34 +4,49 @@
 
 {% block content %}
 
-<div id="map"></div>
+	<div id="map"></div>
 
 
-		<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
-		<script src="https://cdn.jsdelivr.net/leaflet/1.0.0-rc.1/leaflet-src.js"></script>
+	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+	<script src="https://cdn.jsdelivr.net/leaflet/1.0.0-rc.1/leaflet-src.js"></script>
 
-		<!-- ESRI -->
-		<script src="https://cdn.jsdelivr.net/leaflet.esri/2.0.0/esri-leaflet.js"></script>
+	<!-- ESRI -->
+	<script src="https://cdn.jsdelivr.net/leaflet.esri/2.0.0/esri-leaflet.js"></script>
 
-		<!-- ESRI GeoCoder -->
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/leaflet.esri.geocoder/2.1.0/esri-leaflet-geocoder.css">
-		<script src="https://cdn.jsdelivr.net/leaflet.esri.geocoder/2.1.0/esri-leaflet-geocoder.js"></script>
+	<!-- ESRI GeoCoder -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/leaflet.esri.geocoder/2.1.0/esri-leaflet-geocoder.css">
+	<script src="https://cdn.jsdelivr.net/leaflet.esri.geocoder/2.1.0/esri-leaflet-geocoder.js"></script>
 
-		<script>
+	<script>
 
-			var map = L.map('map').setView( [45.416667, -75.7], 12);
-			L.titleLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-			{
-				maxZoom: 20
-			}).addTo(map);
+		var map = L.map('map').setView( [45.416667, -75.7], 12);
 
-			var parcels = L.esri.dynamicMapLayer({
-				url: 'http://maps.ottawa.ca/arcgis/rest/services/Property_Parcels/MapServer',
-				useCors: false
-			});
+		L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+		{
+			maxZoom: 20
+		}).addTo(map);
 
-			parcels.addTo(map);
+		var parcels = L.esri.dynamicMapLayer({
+			url: 'http://maps.ottawa.ca/arcgis/rest/services/Property_Parcels/MapServer',
+			useCors: false
+		});
 
-		</script>
+		parcels.addTo(map);
+
+		parcels.bindPopup(function(error, featureCollection){
+			if( error || featureCollection.features.length === 0){
+				return false;
+			} else {
+				return L.Util.template("<p>{ADDRESS_NUMBER} {ROAD_NAME}</p>", featureCollection.features[0].properties);
+			}
+		});
+
+		var arcgis = L.esri.Geocoding.arcgisOnlineProvider();
+
+		var searchControl = L.esri.Geocoding.geosearch({
+			providers: [arcgis,],
+		}).addTo(map)
+
+	</script>
 
 {% endblock content %}
