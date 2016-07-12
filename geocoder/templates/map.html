@@ -1,0 +1,37 @@
+{% extends "home.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<div id="map"></div>
+
+
+		<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+		<script src="https://cdn.jsdelivr.net/leaflet/1.0.0-rc.1/leaflet-src.js"></script>
+
+		<!-- ESRI -->
+		<script src="https://cdn.jsdelivr.net/leaflet.esri/2.0.0/esri-leaflet.js"></script>
+
+		<!-- ESRI GeoCoder -->
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/leaflet.esri.geocoder/2.1.0/esri-leaflet-geocoder.css">
+		<script src="https://cdn.jsdelivr.net/leaflet.esri.geocoder/2.1.0/esri-leaflet-geocoder.js"></script>
+
+		<script>
+
+			var map = L.map('map').setView( [45.416667, -75.7], 12);
+			L.titleLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+			{
+				maxZoom: 20
+			}).addTo(map);
+
+			var parcels = L.esri.dynamicMapLayer({
+				url: 'http://maps.ottawa.ca/arcgis/rest/services/Property_Parcels/MapServer',
+				useCors: false
+			});
+
+			parcels.addTo(map);
+
+		</script>
+
+{% endblock content %}

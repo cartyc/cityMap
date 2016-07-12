@@ -1,0 +1,114 @@
+/**{
+  border: 1px solid red;
+}
+*/
+body{
+  height: 100%;
+  background-color: #f5f5f5;
+}
+
+/*printing!*/
+@page{
+  size: 8.5in 11in;
+  margin: 70pt 60pt 70pt;
+
+}
+
+.contentArea{
+  margin: 20px;
+}
+
+.row{
+  line-height: 30px;
+  text-align: left;
+}
+
+.workArea{
+  margin: 10px;
+  background-color: #fff;
+  padding: 10px;
+}
+
+#facilities{
+  margin-top: 10px;
+}
+#map{
+  position: relative;
+  margin: 10px 0 0 0;
+  padding: 0;
+  max-width: 100%;
+  min-height: 750px;
+}
+
+#searchMap{
+  position: relative;
+  margin: 10px 0 0 0;
+  padding: 0;
+  max-width: 100%;
+  min-height: 250px;
+}
+
+#singlemap{
+  position: relative;
+  margin: 10px 0 10px 0;
+  padding: 0;
+  max-width: 100%;
+  height: 300px;
+}
+
+
+#search, .search{
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.facilityHeader{
+  margin-bottom: 5px;
+}
+
+.page{
+  width: 8.5in;
+  /*height: 11in;*/
+  position: relative;
+  margin: 0 auto;
+  /*page-break-after: auto;*/
+  page-break-inside: avoid;
+}
+.padding{
+  margin-bottom: 10px;
+}
+.createButton{
+  float: right;
+  position: relative;
+}
+
+.card{
+  background-color: #fff;
+  display: inline-block;
+  width: 100%;
+  margin: 2px;
+  padding: 10px;
+  /*border-bottom: 1px solid #a9b2b5;*/
+}
+
+.card-title{
+  font-size: 18pt;
+  font-weight: strong;
+}
+
+.extraPadding{
+  margin-bottom: 10px;
+}
+
+@media print{
+
+
+  body{
+    font-size: 14pt;
+    width: 8.5in;
+  }
+
+  .pHidden{
+    display: none;
+  }
+}
