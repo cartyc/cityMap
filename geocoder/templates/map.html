@@ -27,8 +27,7 @@
 		}).addTo(map);
 
 		var parcels = L.esri.dynamicMapLayer({
-			url: 'http://maps.ottawa.ca/arcgis/rest/services/Property_Parcels/MapServer',
-			useCors: false
+			url: 'http://maps.ottawa.ca/arcgis/rest/services/Property_Parcels/MapServer'
 		});
 
 		parcels.addTo(map);
@@ -37,6 +36,9 @@
 			if( error || featureCollection.features.length === 0){
 				return false;
 			} else {
+				console.log(featureCollection);
+				// parcels.setFeatureStyle(featureCollection.features[0], {color: 'blue'});
+				console.log(this);
 				return L.Util.template('<p>{ADDRESS_NUMBER} {ROAD_NAME}</p><br><a href="fmp://$/interface.fmp12?script=selectParcel_fromMap&param={PIN}">Select</a>', featureCollection.features[0].properties);
 			}
 		});
@@ -49,7 +51,14 @@
 
 		var searchControl = L.esri.Geocoding.geosearch({
 			useMapBounds: true,
-			providers: [arcgis,],
+			providers: [arcgis,
+				L.esri.Geocoding.mapServiceProvider({
+					label: "Parcels",
+					url: 'http://maps.ottawa.ca/arcgis/rest/services/Property_Parcels/MapServer',
+					layers: [0,2],
+					searchFields: ['FULLNAME', 'FULLADDR', 'ADDRNUM', 'PIN']
+				})
+				],
 			searchBounds: bounds
 		}).addTo(map)
 
