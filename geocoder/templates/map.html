@@ -43,12 +43,12 @@
 
 		var northEast = [45.5375801, -75.2465979],
 		southWest = [44.9627331, -76.3539158],
-		bounds = L.latlngBounds(southWest, northEast);
+		bounds = L.latLngBounds(southWest, northEast);
 
 		var arcgis = L.esri.Geocoding.arcgisOnlineProvider();
 
 		var searchControl = L.esri.Geocoding.geosearch({
-			useMapBounds: true, 
+			useMapBounds: true,
 			providers: [arcgis,],
 			searchBounds: bounds
 		}).addTo(map)
