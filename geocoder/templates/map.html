@@ -51,14 +51,14 @@
 
 		var searchControl = L.esri.Geocoding.geosearch({
 			useMapBounds: true,
-			providers: [arcgis,
+			providers: [
 				L.esri.Geocoding.mapServiceProvider({
 					label: "Parcels",
 					url: 'http://maps.ottawa.ca/arcgis/rest/services/Property_Parcels/MapServer',
 					layers: [0,2],
 					searchFields: [ 'FULLADDR', 'ADDRESS_NUMBER', 'ROAD_NAME','PIN'],
 					formatSuggestion: function(feature){
-						return feature.properties.ADDRESS_NUMBER + " " + feature.properties.ROAD_NAME
+						return feature.properties["FULL ADDRESS"] + " " + feature.properties["PIN"]
 					}
 				})
 				],
