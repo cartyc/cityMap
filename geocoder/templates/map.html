@@ -56,7 +56,7 @@
 					label: "Parcels",
 					url: 'http://maps.ottawa.ca/arcgis/rest/services/Property_Parcels/MapServer',
 					layers: [0,2],
-					searchFields: [ 'FULLADDR', 'ADDRESS_NUMBER', 'ROAD_NAME','PIN'],
+					searchFields: [ 'FULLADDR', 'PIN'],
 					formatSuggestion: function(feature){
 						return feature.properties["FULL ADDRESS"] + " " + feature.properties["PIN"]
 					}
