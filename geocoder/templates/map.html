@@ -50,7 +50,6 @@
 		var arcgis = L.esri.Geocoding.arcgisOnlineProvider();
 
 		var searchControl = L.esri.Geocoding.geosearch({
-			useMapBounds: true,
 			providers: [
 				L.esri.Geocoding.mapServiceProvider({
 					label: "Parcels",
@@ -62,7 +61,6 @@
 					}
 				})
 				],
-			searchBounds: bounds
 		}).addTo(map)
 
 	</script>
