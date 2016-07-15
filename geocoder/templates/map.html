@@ -54,7 +54,6 @@
 				L.esri.Geocoding.mapServiceProvider({
 					label: "Parcels",
 					url: 'http://maps.ottawa.ca/arcgis/rest/services/Property_Parcels/MapServer',
-					layers: [0,2],
 					searchFields: [ 'FULLADDR', 'PIN'],
 					formatSuggestion: function(feature){
 						return feature.properties["Full Address"] + " " + feature.properties["PIN"];
