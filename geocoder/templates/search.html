@@ -75,7 +75,7 @@
 				pin = feature[i].attributes.PIN_NUMBER;
 				var parcel = pinGeoLookUp(feature[i].geometry.x, feature[i].geometry.y)
 				console.log(feature[i].attributes.WARD);
-				$("#resultbody").append("<tr><td><a href='#' class='btn btn-secondary'>Select</td><td>" + fulladdress + "</td><td>" + parcel + "</td></tr>")
+				$("#resultbody").append("<tr><td><a href='fmp://$/interface.fmp12?script=selectParcel_fromMap&param="+pin+"'>Select</a></td><td>" + fulladdress + "</td><td>" + parcel + "</td></tr>")
 			}
 
 		}
