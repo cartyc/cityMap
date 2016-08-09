@@ -65,7 +65,7 @@
 				var pin = feature[i].attributes.PIN_NUMBER,
 				fulladdress = feature[i].attributes.ADDRESS_NUMBER + ' ' + feature[i].attributes.ROAD_NAME + ' ' + feature[i].attributes.SUFFIX + ' ' + ( (feature[i].attributes.DIR == null ) ? '' : feature[i].attributes.DIR)
 
-				$("#resultbody").append("<tr><td><a href='#' class='btn btn-secondary'>Select</td><td>" + fulladdress + "</td><td>" + pin + "</td></tr>")
+				$("#resultbody").append("<tr><td><a href='fmp://$/interface.fmp12?script=selectParcel_fromMap&param="+pin+"'>Select</a></td><td>" + fulladdress + "</td><td>" + pin + "</td></tr>")
 			}
 		} else {
 			var feature = addressSearch(address)
