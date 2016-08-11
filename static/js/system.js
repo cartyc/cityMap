@@ -7,36 +7,47 @@ function searchGeoOttawa(){
 
 
 		//Append Table
-		$("#results").append("<table id='rtable' class='table'><thead><tr><th></th><th>Address</th><th>Pin#</th></tr></thead><tbody id='resultbody'></tbody></table>");
+		$("#results").append("<table id='rtable' class='table'><thead><tr><th>Address</th><th>Pin#</th><th>Zoning</th><th>Ward</th></tr></thead><tbody id='resultbody'></tbody></table>");
 
 		// Determine if search for pin or address by checking if number
 		// If number that means pin
+		var points = [];
 
 		if( isNaN(address) == false){
 			var feature = pinSearch(address)
 
 			for ( var i = 0; i < feature.length; i++){
 				var pin = feature[i].attributes.PIN_NUMBER,
-				fulladdress = feature[i].attributes.ADDRESS_NUMBER + ' ' + feature[i].attributes.ROAD_NAME + ' ' + feature[i].attributes.SUFFIX + ' ' + ( (feature[i].attributes.DIR == null ) ? '' : feature[i].attributes.DIR)
+				zoning = zoningLookUp(0,0, feature[i].geometry),
+				zoneCode = zoning.ZONE_CODE,
+				zoningLink = zoning.URL,
+				ward = feature[i].attributes.WARD,
+				fulladdress = feature[i].attributes.ADDRESS_NUMBER + ' ' + feature[i].attributes.ROAD_NAME + ' ' + feature[i].attributes.SUFFIX + ' ' + ( (feature[i].attributes.DIR == null ) ? '' : feature[i].attributes.DIR);
 
-				$("#resultbody").append("<tr><td>" + fulladdress + "</td><td>" + pin + "</td></tr>")
+				$("#resultbody").append("<tr><td>" + fulladdress + "</td><td>" + pin + "</td><td><a href='http://www.ottawa.ca" + zoningLink +"' target='_blank'>"+ zoneCode + "</a></td><td>" + ward + "</td></tr>")
 			}
+
 		} else {
 			var feature = addressSearch(address)
-
 			for (var i = 0; i < feature.length; i++){
 				var fulladdress = feature[i].attributes.FULLADDR,
 				pin = feature[i].attributes.PIN_NUMBER;
-				var parcel = pinGeoLookUp(feature[i].geometry.x, feature[i].geometry.y)
-				console.log(feature[i].attributes.WARD);
-				$("#resultbody").append("<tr><td>" + fulladdress + "</td><td>" + parcel + "</td></tr>")
+				var pin = pinGeoLookUp(feature[i].geometry.x, feature[i].geometry.y)
+				var zoning = zoningLookUp(feature[i].geometry.x, feature[i].geometry.y),
+				zoneCode = zoning.ZONE_CODE,
+				zoningLink = zoning.URL,
+				ward = feature[i].attributes.WARD;
+
+				// Add Points to dict for mapping
+				var point = { "coordinates" : [feature[i].geometry.x, feature[i].geometry.y], "fullAddress": fulladdress, "pin": pin, "zoning": zoneCode, "zoneLink": zoningLink, "ward": ward };
+				points.push(point);
+
+				$("#resultbody").append("<tr><td>" + fulladdress + "</td><td>" + pin + "</td><td><a href='http://www.ottawa.ca" + zoningLink +"' target='_blank'>"+ zoneCode + "</a></td><td>" + ward + "</td></tr>")
 			}
 
 		}
 
-
-
-
+		plotResults(points);
 	}
 
 	//Iniate Search on submit
@@ -58,7 +69,7 @@ function searchGeoOttawa(){
 				
 			},
 			error: function(err){
-				$("#results").empty().append("<p>" + err.responseText + "</p>")
+				$("#error").empty().append("<p>" + err.responseText + "</p>")
 			},
 			dataType: "JSON",
 			async: false
