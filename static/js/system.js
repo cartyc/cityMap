@@ -19,7 +19,7 @@ function searchGeoOttawa(){
 				var pin = feature[i].attributes.PIN_NUMBER,
 				fulladdress = feature[i].attributes.ADDRESS_NUMBER + ' ' + feature[i].attributes.ROAD_NAME + ' ' + feature[i].attributes.SUFFIX + ' ' + ( (feature[i].attributes.DIR == null ) ? '' : feature[i].attributes.DIR)
 
-				$("#resultbody").append("<tr><td><a href='fmp://$/interface.fmp12?script=selectParcel_fromMap&param="+pin+"' class='btn btn-secondary'>Select</a></td><td>" + fulladdress + "</td><td>" + pin + "</td></tr>")
+				$("#resultbody").append("<tr><td>" + fulladdress + "</td><td>" + pin + "</td></tr>")
 			}
 		} else {
 			var feature = addressSearch(address)
@@ -29,7 +29,7 @@ function searchGeoOttawa(){
 				pin = feature[i].attributes.PIN_NUMBER;
 				var parcel = pinGeoLookUp(feature[i].geometry.x, feature[i].geometry.y)
 				console.log(feature[i].attributes.WARD);
-				$("#resultbody").append("<tr><td><a href='fmp://$/interface.fmp12?script=selectParcel_fromMap&param="+pin+"' class='btn btn-secondary'>Select</a></td><td>" + fulladdress + "</td><td>" + parcel + "</td></tr>")
+				$("#resultbody").append("<tr><td>" + fulladdress + "</td><td>" + parcel + "</td></tr>")
 			}
 
 		}
