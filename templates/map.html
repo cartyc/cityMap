@@ -39,7 +39,7 @@
 				console.log(featureCollection);
 				// parcels.setFeatureStyle(featureCollection.features[0], {color: 'blue'});
 				console.log(this);
-				return L.Util.template('<p>{ADDRESS_NUMBER} {ROAD_NAME}</p><br><a href="fmp://$/interface.fmp12?script=selectParcel_fromMap&param={PIN}">Select</a>', featureCollection.features[0].properties);
+				return L.Util.template('<p>{ADDRESS_NUMBER} {ROAD_NAME}</p><br>', featureCollection.features[0].properties);
 			}
 		});
 
