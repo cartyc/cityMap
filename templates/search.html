@@ -1,37 +1,71 @@
-{% load static %}
+
+
 <!DOCTYPE html>
 
 <html>
 
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<script src="{% static "js/jquery.min.js" %}"></script>
-	
+	<title>Property Search</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.3/css/bootstrap.min.css" integrity="	sha384-MIwDKRSSImVFAZCVLtU0LMDdON6KVCrZHyVQQj6e8wIEJkW4tvwqXrbMIya1vriY" crossorigin="anonymous">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js" integrity="sha384-THPy051/pYDQGanwU6poAc/hOdQxjnOEXzbT+OuUAFqNqFjL+4IGLBgCJC3ZOShY" crossorigin="anonymous"></script>
 
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/tether/1.2.0/js/tether.min.js" integrity="sha384-Plbmg8JY28KFelvJVai01l8WyZzrYWG825m+cZ0eDDS1f7d/js6ikvy1+X+guPIB" crossorigin="anonymous"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.3/js/bootstrap.min.js" integrity="sha384-ux8v3A6CPtOTqOzMKiuo3d/DomGaaClxFYdCu2HPMBEkf6x2xiDyJ7gkXU0MWwaD" crossorigin="anonymous"></script>
-	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.3/js/bootstrap.min.js" integrity="sha384-ux8v3A6CPtOTqOzMKiuo3d/DomGaaClxFYdCu2HPMBEkf6x2xiDyJ7gkXU0MWwaD" crossorigin="anonymous"></script>
+	<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+
+
+	<!-- Leaftlet -->
+	<!-- Load Leaflet from CDN-->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/leaflet/1.0.0-rc.1/leaflet.css" />
+	<script src="https://cdn.jsdelivr.net/leaflet/1.0.0-rc.1/leaflet-src.js"></script>
+
+	<!-- Load Esri Leaflet from CDN -->
+	<script src="https://cdn.jsdelivr.net/leaflet.esri/2.0.0/esri-leaflet.js"></script>
+
+	<!-- ESRI GeoCoder -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/leaflet.esri.geocoder/2.1.0/esri-leaflet-geocoder.css">
+	<script src="https://cdn.jsdelivr.net/leaflet.esri.geocoder/2.1.0/esri-leaflet-geocoder.js"></script>
+
+	<!-- Proj4js  -->
+	<!-- For converting coords -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.14/proj4-src.js"></script>
 
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<style>
-		body{
-			margin: 10px;
-		}
 
+	<style>
+		html, body{
+	      height: 100%;
+	      margin: 10px;
+		}
+    	#map { 
+    		margin-top: 20px;
+    		position: relative; 
+    		min-height: 600px;
+    		width: 100%;
+    	}
 	</style>
 </head>
 <body>
-
+	<header>
+		<div class="alert alert-info alert-dismissible" role="alert">
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		    <span aria-hidden="true">&times;</span>
+		  </button>
+			<strong>Usage</strong>
+			<p>Limited to 25 results for performance reason. Some queries can take a bit of time</p>
+			<p>If searching an address do not use the full address type ie avenue, road</p>
+			<p>use the truncated version ie rd, ave instead or just omit it.</p>
+		</div>
+	</header>
 	<main>
 		<div class="row">
 			<form id="parcelSearch" action="" method="GET">
 				<div class="col-md-12">
 					<div class="input-group">
-						<input type="text" name="address_name" id="address_name" placeholder="Search..." class="form-control">		
+						<input type="text" name="address_name" id="address_name" placeholder="Search Address/Pin..." class="form-control">		
 						<span class="input-group-btn">
 							<button class="btn btn-primary" type="submit">
 								<i class="fa fa-search" aria-hidden="true"></i>
@@ -43,10 +77,201 @@
 		</div>
 
 		<div id="results"></div>
-
+		<div id="map"></div>
 	</main>
-	<script src="{% static "js/system.js" %}"></script>
+	<footer>
+		
+	</footer>
+	<script>
 
+
+	function searchGeoOttawa(){
+		event.preventDefault();
+		$("#results").empty();
+
+		var data = $("#pin").val(),
+		address = $("#address_name").val().toUpperCase();
+
+
+		//Append Table
+		$("#results").append("<table id='rtable' class='table'><thead><tr><th>Address</th><th>Pin#</th><th>Zoning</th><th>Ward</th></tr></thead><tbody id='resultbody'></tbody></table>");
+
+		// Determine if search for pin or address by checking if number
+		// If number that means pin
+		var points = [];
+
+		if( isNaN(address) == false){
+			var feature = pinSearch(address)
+
+			for ( var i = 0; i < feature.length; i++){
+				var pin = feature[i].attributes.PIN_NUMBER,
+				zoning = zoningLookUp(0,0, feature[i].geometry),
+				zoneCode = zoning.ZONE_CODE,
+				zoningLink = zoning.URL,
+				ward = feature[i].attributes.WARD,
+				fulladdress = feature[i].attributes.ADDRESS_NUMBER + ' ' + feature[i].attributes.ROAD_NAME + ' ' + feature[i].attributes.SUFFIX + ' ' + ( (feature[i].attributes.DIR == null ) ? '' : feature[i].attributes.DIR);
+
+				$("#resultbody").append("<tr><td>" + fulladdress + "</td><td>" + pin + "</td><td><a href='http://www.ottawa.ca" + zoningLink +"' target='_blank'>"+ zoneCode + "</a></td><td>" + ward + "</td></tr>")
+			}
+		} else {
+			var feature = addressSearch(address)
+			for (var i = 0; i < feature.length; i++){
+				var fulladdress = feature[i].attributes.FULLADDR,
+				pin = feature[i].attributes.PIN_NUMBER;
+				var pin = pinGeoLookUp(feature[i].geometry.x, feature[i].geometry.y)
+				var zoning = zoningLookUp(feature[i].geometry.x, feature[i].geometry.y),
+				zoneCode = zoning.ZONE_CODE,
+				zoningLink = zoning.URL,
+				ward = feature[i].attributes.WARD;
+
+				// Add Points to dict for mapping
+				var point = { "coordinates" : [feature[i].geometry.x, feature[i].geometry.y], "fullAddress": fulladdress, "pin": pin, "zoning": zoneCode, "zoneLink": zoningLink, "ward": ward };
+				points.push(point);
+
+				$("#resultbody").append("<tr><td>" + fulladdress + "</td><td>" + pin + "</td><td><a href='http://www.ottawa.ca" + zoningLink +"' target='_blank'>"+ zoneCode + "</a></td><td>" + ward + "</td></tr>")
+			}
+
+		}
+
+		plotResults(points);
+	}
+
+	//Iniate Search on submit
+	$("#parcelSearch").submit(function(){
+		searchGeoOttawa();
+	})
+
+
+	// Ajax Query
+	var query = function(url){
+
+		var feature;
+
+		$.ajax({
+			url: url,
+			type: "GET",
+			success: function(results){
+				feature = results.features;
+				
+			},
+			error: function(err){
+				$("#results").empty().append("<p>" + err.responseText + "</p>")
+			},
+			dataType: "JSON",
+			async: false
+
+		})
+
+		return feature;
+	}
+
+
+	// address search
+	var addressSearch = function(address){
+		var url = "http://geoservices/arcgis/rest/services/internal/Property_Parcels/MapServer/0/query?where=FULLADDR+Like%27%25" + address + "%25%27&text=&objectIds=&time=&geometry=&geometryType=esriGeometryPoint&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=FULLADDR%2C+POINTTYPE%2C+WARD%2C+PLACENAME&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=25&f=pjson"
+
+		var feature = query(url);
+		return feature
+	}
+
+
+	//Pin Search
+	var pinGeoLookUp = function(x, y){
+
+		var url = "http://geoservices/arcgis/rest/services/internal/Property_Parcels/MapServer/2/query?where=&text=&objectIds=&time=&geometry=" + x + "," + y +"%0D%0A&geometryType=esriGeometryPoint&inSR=&spatialRel=esriSpatialRelWithin&relationParam=&outFields=ADDRESS_NUMBER%2CROAD_NAME%2CSUFFIX%2CPIN_NUMBER%2CADDRESS_TYPE_ID%2CADDRESS_STATUS%2COBJECTID&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=pjson";
+
+		var get = query(url);
+
+		return get[0].attributes.PIN_NUMBER
+	}
+
+	var zoningLookUp = function(x,y, geomtry){
+
+		if (geomtry){
+			console.log("geom")
+			var url = "maps.ottawa.ca/arcgis/rest/services/Zoning/MapServer/3/query?where=&text=&objectIds=&time=&geometry=" + JSON.stringify(geomtry) + "&geometryType=esriGeometryPolygon&inSR=&spatialRel=esriSpatialRelWithin&relationParam=&outFields=ZONINGTYPE%2CZONE_CODE%2CZONE_MAIN%2CPIN%2C+URL+&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=pjson"
+
+			var get = query(url);
+
+		} else {
+			var url = "maps.ottawa.ca/arcgis/rest/services/Zoning/MapServer/3/query?where=&text=&objectIds=&time=&geometry=" + x + "," + y +"&geometryType=esriGeometryPoint&inSR=&spatialRel=esriSpatialRelWithin&relationParam=&outFields=ZONINGTYPE%2CZONE_CODE%2CZONE_MAIN%2CPIN%2C+URL+&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=pjson"
+			var get = query(url);			
+		}
+
+
+		try{
+			var attr = get[0].attributes
+		} catch (err){
+			var  attr = ''
+		}
+
+		return attr
+	}
+
+	// External
+	//http://maps.ottawa.ca/arcgis/rest/services/Property_Parcels/MapServer
+
+	var pinSearch = function(pin){
+
+		var url = "maps.ottawa.ca/arcgis/rest/services/Property_Parcels/MapServer/2/query?where=PIN_NUMBER%3D" + pin + "&text=&objectIds=&time=&geometry=&geometryType=esriGeometryPoint&inSR=&spatialRel=esriSpatialRelWithin&relationParam=&outFields=ADDRESS_NUMBER%2CROAD_NAME%2CSUFFIX%2CPIN_NUMBER%2CADDRESS_TYPE_ID%2CADDRESS_STATUS%2COBJECTID%2CDIR &returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=25&f=pjson";
+
+		var get = query(url);
+
+		return get
+
+	}
+
+
+		//Mapping
+
+	var map = L.map('map').setView( [45.416667, -75.7], 15);
+	// L.esri.basemapLayer('Streets').addTo(map);
+
+    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png',{
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+	var points;
+
+    function plotResults(markers){
+
+    	try{
+    		console.log("remove")
+	    	map.removeLayer(points)
+    	} catch(err){
+    		console.error(err)
+    	}
+
+
+	    
+	    points = L.featureGroup().addTo(map);
+
+   		for( var i = 0; i < markers.length; i++){
+
+	   		//Convert the coords
+	   		var fromCoords = 'PROJCS["City of Ottawa",GEOGCS["GCS_North_American_1983",DATUM["D_North_American_1983",SPHEROID["GRS_1980",6378137.0,298.257222101]],PRIMEM["Greenwich",0.0],UNIT["Degree",0.0174532925199433]],PROJECTION["Transverse_Mercator"],PARAMETER["False_Easting",304800.0],PARAMETER["False_Northing",0.0],PARAMETER["Central_Meridian",-76.5],PARAMETER["Scale_Factor",0.9999],PARAMETER["Latitude_Of_Origin",0.0],UNIT["Meter",1.0]]';
+
+	   		var toCoords = "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees"
+
+	   		var output = proj4(fromCoords, toCoords,markers[i].coordinates )
+	   		var latlng = [output[1], output[0]];
+	   		console.log(markers[i])
+	   		marker = L.marker(latlng);
+	   		 marker.bindPopup(
+                "<div class='row'><div class='col-md-12'><h4>" + markers[i]["fullAddress"] +"</h4></div></div><div class='row'><table class='table'><tr><td>Pin</td><td>" + markers[i]["pin"] +"</td></tr>\
+                <tr><td>Zoning</td><td><a href='http://www.ottawa.ca" + markers[i]["zoneLink"] +"' target='_blank'>" +markers[i]["zoning"] + "</a></td></tr>\
+                <tr><td>Ward</td><td>" + markers[i]["ward"] +"</td></tr>\
+                </table></div>", markers[i]);
+
+	   		points.addLayer(marker);
+
+   		}	
+
+   		map.fitBounds(points.getBounds());
+	    }
+
+	</script>
 
 </body>
 
