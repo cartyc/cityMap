@@ -230,9 +230,11 @@
 	   		var toCoords = "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees"
 
 	   		var output = proj4(fromCoords, toCoords,markers[i].coordinates )
+
 	   		var latlng = [output[1], output[0]];
-	   		console.log(markers[i])
-	   		marker = L.marker(latlng);
+	   		var newlatlng = [markers[i].coordinates[1], markers[i].coordinates[0]];
+	   		console.log("Points\n" + latlng + "\n" + newlatlng);
+	   		marker = L.marker(newlatlng);
 	   		 marker.bindPopup(
                 "<div class='row'><div class='col-md-12'><h4>" + markers[i]["fullAddress"] +"</h4></div></div><div class='row'><table class='table'><tr><td>Pin</td><td>" + markers[i]["pin"] +"</td></tr>\
                 <tr><td>Zoning</td><td><a href='http://www.ottawa.ca" + markers[i]["zoneLink"] +"' target='_blank'>" +markers[i]["zoning"] + "</a></td></tr>\
