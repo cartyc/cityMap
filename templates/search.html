@@ -121,13 +121,44 @@
 
 		//Mapping
 
-	var map = L.map('map').setView( [45.416667, -75.7], 15);
-	// L.esri.basemapLayer('Streets').addTo(map);
-
-    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png',{
+	var road = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png',{
       maxZoom: 19,
       attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
+    });
+
+    var googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s,m&x={x}&y={y}&z={z}',{
+	    maxZoom: 20,
+	    subdomains:['mt0','mt1','mt2','mt3']
+	});
+
+
+    var roads = L.esri.dynamicMapLayer({
+    	url: "http://maps.ottawa.ca/arcgis/rest/services/Streets/MapServer/"
+    }),
+    wards = L.esri.dynamicMapLayer({
+    	url: "http://maps.ottawa.ca/arcgis/rest/services/Wards/MapServer/"
+    }),
+    waterSewer = L.esri.dynamicMapLayer({
+    	url: "http://maps.ottawa.ca/arcgis/rest/services/WaterAndSewer/MapServer"
+    }),
+    zoningMap = L.esri.dynamicMapLayer({
+    	url: "http://maps.ottawa.ca/arcgis/rest/services/Zoning/MapServer",
+    	opacity: .7
+    }),
+    parcelMap = L.esri.dynamicMapLayer({
+    	url: "http://maps.ottawa.ca/arcgis/rest/services/Property_Parcels/MapServer/"
+    });
+
+
+    var baseMaps = {"road": road, "Google Sat": googleSat};
+
+    var overlays = {"streets": roads, 'wards': wards, 'Sewer and Water': waterSewer, "zoning": zoningMap, "Parcels": parcelMap};
+    
+	var map = L.map('map', {
+		layers: [road]
+	}).setView( [45.416667, -75.7], 15);
+
+	L.control.layers(baseMaps, overlays).addTo(map);
 
 	var points;
 
