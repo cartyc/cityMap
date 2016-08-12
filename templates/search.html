@@ -61,6 +61,11 @@
 		</div>
 	</header>
 	<main>
+		<!-- <div class="row">
+			<button class='btn btn-secondary' type="button" onclick="getCurrentLocation()">
+				<i class="fa fa-location-arrow" aria-hidden="true"></i>
+			</button>
+		</div> -->
 		<div class="row">
 			<form id="parcelSearch" action="" method="GET">
 				<div class="col-md-12">
@@ -88,6 +93,31 @@
 	<script>
 
 
+
+	var getCurrentLocation = function(position){
+		var startPos;
+		var geoSuccess = function(position){
+			startPos = position;
+			var lat = position.coords.latitude,
+			lng = position.coords.longitude;
+			L.marker([lat, lng]).addTo(map);
+
+			console.log("Coords\n" + lat, lng);
+		}
+
+		console.log("getting location");
+		if (navigator.geolocation){
+			try{
+				console.log("tryin")
+				navigator.geolocation.getCurrentPosition(geoSuccess);
+
+			} catch(err){
+				console.error(err)
+			}
+		} else{
+			console.log("no geo");
+		}
+	}
 
 	var zoningLookUp = function(x,y, geomtry){
 
@@ -124,9 +154,12 @@
 	var road = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png',{
       maxZoom: 19,
       attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
-    });
-
-    var googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s,m&x={x}&y={y}&z={z}',{
+    }),
+    googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s,m&x={x}&y={y}&z={z}',{
+	    maxZoom: 21,
+	    subdomains:['mt0','mt1','mt2','mt3']
+	}),
+    googleRoad = L.tileLayer('http://{s}.google.com/vt/lyrs=r,m&x={x}&y={y}&z={z}',{
 	    maxZoom: 20,
 	    subdomains:['mt0','mt1','mt2','mt3']
 	});
@@ -135,6 +168,9 @@
     var roads = L.esri.dynamicMapLayer({
     	url: "http://maps.ottawa.ca/arcgis/rest/services/Streets/MapServer/"
     }),
+   	cycling = L.esri.dynamicMapLayer({
+   		url: "http://maps.ottawa.ca/arcgis/rest/services/CyclingMap/MapServer/"
+   	}),
     wards = L.esri.dynamicMapLayer({
     	url: "http://maps.ottawa.ca/arcgis/rest/services/Wards/MapServer/"
     }),
@@ -147,12 +183,15 @@
     }),
     parcelMap = L.esri.dynamicMapLayer({
     	url: "http://maps.ottawa.ca/arcgis/rest/services/Property_Parcels/MapServer/"
+    }),
+    transit = L.esri.dynamicMapLayer({
+    	url: "http://maps.ottawa.ca/arcgis/rest/services/TransitServices/MapServer"
     });
 
 
-    var baseMaps = {"road": road, "Google Sat": googleSat};
+    var baseMaps = {"Road": road, "Google Road": googleRoad, "Google Sat": googleSat};
 
-    var overlays = {"streets": roads, 'wards': wards, 'Sewer and Water': waterSewer, "zoning": zoningMap, "Parcels": parcelMap};
+    var overlays = {"Streets": roads, 'wards': wards, 'Sewer and Water': waterSewer, "zoning": zoningMap, "Parcels": parcelMap, "Cycling": cycling, "Transit": transit };
     
 	var map = L.map('map', {
 		layers: [road]
