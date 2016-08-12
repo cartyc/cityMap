@@ -10,3 +10,7 @@ html, body, #map{
 #selectedFeatures{
 	background-color: blue;
 }
+
+.bottomPadding{
+	padding: 10px;
+}

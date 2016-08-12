@@ -61,11 +61,13 @@
 		</div>
 	</header>
 	<main>
-		<!-- <div class="row">
-			<button class='btn btn-secondary' type="button" onclick="getCurrentLocation()">
-				<i class="fa fa-location-arrow" aria-hidden="true"></i>
-			</button>
-		</div> -->
+		<div class="row nav">
+			<div class="col-md-1 offset-md-11">
+				<button class='btn btn-secondary pull-right' type="button" onclick="getCurrentLocation()">
+					<i class="fa fa-location-arrow" aria-hidden="true"></i>
+				</button>
+			</div>
+		</div>
 		<div class="row">
 			<form id="parcelSearch" action="" method="GET">
 				<div class="col-md-12">
@@ -93,31 +95,6 @@
 	<script>
 
 
-
-	var getCurrentLocation = function(position){
-		var startPos;
-		var geoSuccess = function(position){
-			startPos = position;
-			var lat = position.coords.latitude,
-			lng = position.coords.longitude;
-			L.marker([lat, lng]).addTo(map);
-
-			console.log("Coords\n" + lat, lng);
-		}
-
-		console.log("getting location");
-		if (navigator.geolocation){
-			try{
-				console.log("tryin")
-				navigator.geolocation.getCurrentPosition(geoSuccess);
-
-			} catch(err){
-				console.error(err)
-			}
-		} else{
-			console.log("no geo");
-		}
-	}
 
 	var zoningLookUp = function(x,y, geomtry){
 
@@ -200,6 +177,42 @@
 	L.control.layers(baseMaps, overlays).addTo(map);
 
 	var points;
+
+
+	var getCurrentLocation = function(position){
+
+	    points = L.featureGroup().addTo(map);
+
+		var startPos;
+		var geoSuccess = function(position){
+
+	    	try{
+	    		console.log("remove")
+		    	map.removeLayer(points)
+	    	} catch(err){
+	    		console.error(err)
+	    	}
+			startPos = position;
+			var lat = position.coords.latitude,
+			lng = position.coords.longitude;
+			var marker = L.marker([lat, lng]);
+
+			points.addLayer(marker)
+
+			map.fitBounds(points.getBounds());
+		}
+
+		if (navigator.geolocation){
+			try{
+				navigator.geolocation.getCurrentPosition(geoSuccess);
+
+			} catch(err){
+				console.error(err)
+			}
+		} else{
+			console.log("no geo");
+		}
+	}
 
     function plotResults(markers){
 
