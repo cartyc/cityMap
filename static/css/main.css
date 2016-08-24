@@ -2,7 +2,7 @@
   border: 1px solid red;
 }
 */
-html, body, #map{
+html, body{
   height: 100%;
   width: 100%;
 }
@@ -13,4 +13,11 @@ html, body, #map{
 
 .bottomPadding{
 	padding: 10px;
+}
+
+.map { 
+	margin-top: 20px;
+	position: relative; 
+	min-height: 600px;
+	width: 100%;
 }
