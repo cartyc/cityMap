@@ -38,53 +38,58 @@
 	<style>
 		html, body{
 	      height: 100%;
-	      margin: 10px;
 		}
     	#map { 
-    		margin-top: 20px;
     		position: relative; 
-    		min-height: 600px;
+    		min-height: calc(100vh - 55px);
     		width: 100%;
+    	}
+
+    	#parcelSearch{
+    		min-width: 80%;
+    	}
+
+    	.hidden{
+    		visibility: hidden;
     	}
 	</style>
 </head>
 <body>
-	<header>
-		<div class="alert alert-info alert-dismissible" role="alert">
-		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-		    <span aria-hidden="true">&times;</span>
-		  </button>
-			<strong>Usage</strong>
-			<p>Limited to 25 results for performance reason. Some queries can take a bit of time</p>
-			<p>If searching an address do not use the full address type ie avenue, road</p>
-			<p>use the truncated version ie rd, ave instead or just omit it.</p>
-		</div>
-	</header>
-	<main>
-		<div class="row nav">
-			<div class="col-md-1 offset-md-11">
-				<button class='btn btn-secondary pull-right' type="button" onclick="getCurrentLocation()">
+	
+	<nav class="navbar navbar-full navbar-dark bg-faded" style="background-color: #6B818C">
+		<a href="" class="navbar-brand">
+			Property Search
+		</a>
+		<ul class="nav navbar-nav pull-right">
+			<li class="nav-item">
+				<a class="nav-link" onclick="getCurrentLocation()">
 					<i class="fa fa-location-arrow" aria-hidden="true"></i>
-				</button>
+				</a>
+			</li>
+		</ul>
+
+		<form id="parcelSearch" action="" method="GET" class="form-inline pull-right">
+			<div class="input-group">
+				<input type="text" name="address_name" id="address_name" placeholder="Search Address/Pin..." class="form-control">		
+				<span class="input-group-btn">
+					<button class="btn btn-primary" type="submit">
+						<i class="fa fa-search" aria-hidden="true"></i>
+					</button>
+				</span>
+			</div>
+		</form>
+	</nav>
+
+	<main>
+
+		<div class="row">
+			<div id="result-container" class="col-md-4 hidden">
+				<div id="results"></div>
+			</div>
+			<div id="map-container" class="col-md-12">
+				<div id="map"></div>				
 			</div>
 		</div>
-		<div class="row">
-			<form id="parcelSearch" action="" method="GET">
-				<div class="col-md-12">
-					<div class="input-group">
-						<input type="text" name="address_name" id="address_name" placeholder="Search Address/Pin..." class="form-control">		
-						<span class="input-group-btn">
-							<button class="btn btn-primary" type="submit">
-								<i class="fa fa-search" aria-hidden="true"></i>
-							</button>
-						</span>
-					</div>
-				</div>
-			</form>
-		</div>
-
-		<div id="results"></div>
-		<div id="map"></div>
 	</main>
 	<footer>
 		
@@ -163,12 +168,22 @@
     }),
     transit = L.esri.dynamicMapLayer({
     	url: "http://maps.ottawa.ca/arcgis/rest/services/TransitServices/MapServer"
+    }),
+    trees = L.esri.dynamicMapLayer({
+    	url: "http://maps.ottawa.ca/arcgis/rest/services/Miscellaneous/MapServer",
+    	layers: [1]
     });
 
 
+    trees.bindPopup(function(error, featureLayer){
+    	console.log(featureLayer)
+    	var results = featureLayer.features[0].properties;
+    	return "<div class='container'><h4>Tree</h4><div class='row'><div class='col-md-5'>Species</div><div class='col-md-7'>" + results['Species'] + "</div></div>" ;
+    });
+
     var baseMaps = {"Road": road, "Google Road": googleRoad, "Google Sat": googleSat};
 
-    var overlays = {"Streets": roads, 'wards': wards, 'Sewer and Water': waterSewer, "zoning": zoningMap, "Parcels": parcelMap, "Cycling": cycling, "Transit": transit };
+    var overlays = {"Streets": roads, 'wards': wards, 'Sewer and Water': waterSewer, "zoning": zoningMap, "Parcels": parcelMap, "Cycling": cycling, "Transit": transit, "Trees": trees };
     
 	var map = L.map('map', {
 		layers: [road]
@@ -248,6 +263,10 @@
 	   		points.addLayer(marker);
 
    		}	
+
+   		$("#result-container").removeClass("hidden")
+   		$("#map-container").removeClass("col-md-12")
+   		$("#map-container").addClass("col-md-8")
 
    		map.fitBounds(points.getBounds());
 	    }
