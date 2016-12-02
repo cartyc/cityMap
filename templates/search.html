@@ -52,6 +52,11 @@
     	.hidden{
     		visibility: hidden;
     	}
+
+    	.popup{
+    		min-height: 100px;
+    		min-width: 300px;
+    	}
 	</style>
 </head>
 <body>
@@ -178,7 +183,7 @@
     trees.bindPopup(function(error, featureLayer){
     	console.log(featureLayer)
     	var results = featureLayer.features[0].properties;
-    	return "<div class='container'><h4>Tree</h4><div class='row'><div class='col-md-5'>Species</div><div class='col-md-7'>" + results['Species'] + "</div></div>" ;
+    	return "<div class='container popup'><div class='row'><div class='col-md-5'>Species</div><div class='col-md-7'>" + results['Species'] + "</div></div><div class='row'><div class='col-md-5'>Diameter (cm)</div><div class='col-md-7'>" + results['Diameter (cm)'] + "</div></div><div class='row'><div class='col-md-5'>Trunck Strcture</div><div class='col-md-7'>" + results['Trunck Strcture'] + "</div></div></div>" ;
     });
 
     var baseMaps = {"Road": road, "Google Road": googleRoad, "Google Sat": googleSat};
