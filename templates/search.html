@@ -174,16 +174,21 @@
     transit = L.esri.dynamicMapLayer({
     	url: "http://maps.ottawa.ca/arcgis/rest/services/TransitServices/MapServer"
     }),
-    trees = L.esri.dynamicMapLayer({
-    	url: "http://maps.ottawa.ca/arcgis/rest/services/Miscellaneous/MapServer",
-    	layers: [1]
+    trees = L.esri.featureLayer({
+    	url: "http://maps.ottawa.ca/arcgis/rest/services/Miscellaneous/MapServer/1",
+    	pointToLayer: function(geoJson, latlng) {
+    		console.log(geoJson)
+    		var diameter = geoJson.properties.DBH / 100;
+    		return L.circle(latlng, {radius: diameter * 5, color: "#68B684"})
+    	}
+    	
     });
 
 
-    trees.bindPopup(function(error, featureLayer){
+    trees.bindPopup(function(featureLayer){
     	console.log(featureLayer)
-    	var results = featureLayer.features[0].properties;
-    	return "<div class='container popup'><div class='row'><div class='col-md-5'>Species</div><div class='col-md-7'>" + results['Species'] + "</div></div><div class='row'><div class='col-md-5'>Diameter (cm)</div><div class='col-md-7'>" + results['Diameter (cm)'] + "</div></div><div class='row'><div class='col-md-5'>Trunck Strcture</div><div class='col-md-7'>" + results['Trunck Strcture'] + "</div></div></div>" ;
+    	var results = featureLayer.feature.properties;
+    	return "<div class='container popup'><div class='row'><div class='col-md-5'>Species</div><div class='col-md-7'>" + results['SPECIES'] + "</div></div><div class='row'><div class='col-md-5'>Diameter (cm)</div><div class='col-md-7'>" + results['DBH'] + "</div></div><div class='row'><div class='col-md-5'>Trunk Structure</div><div class='col-md-7'>" + results['TRUNCSTRCT'] + "</div></div></div>" ;
     });
 
     var baseMaps = {"Road": road, "Google Road": googleRoad, "Google Sat": googleSat};
