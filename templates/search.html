@@ -31,6 +31,10 @@
 	<!-- For converting coords -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.14/proj4-src.js"></script>
 
+	{# Box Zoom #}
+	<link rel="stylesheet" href="{% static "css/L.Control.ZoomBox.css" %}">
+	<script src="{% static "js/L.Control.ZoomBox.min.js" %}"></script>
+
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -51,12 +55,31 @@
 
     	.hidden{
     		visibility: hidden;
+    		padding: 0;
+    		height: 0
     	}
 
     	.popup{
     		min-height: 100px;
     		min-width: 300px;
     	}
+
+		.leaflet-expand-icon{
+			position: relative;
+		}
+
+    	.leaflet-expand-icon.collapse::before {
+		    /*background: transparent no-repeat center center;*/
+	        font-family: FontAwesome;
+		    /*src: https://design.google.com/icons/#ic_crop_free*/
+		    content: "\f066";
+		}
+		
+		.leaflet-expand-icon.expand::before{
+			font-family: FontAwesome;
+			content: "\f065";
+		}
+
 	</style>
 </head>
 <body>
@@ -65,13 +88,6 @@
 		<a href="" class="navbar-brand">
 			Property Search
 		</a>
-		<ul class="nav navbar-nav pull-right">
-			<li class="nav-item">
-				<a class="nav-link" onclick="getCurrentLocation()">
-					<i class="fa fa-location-arrow" aria-hidden="true"></i>
-				</a>
-			</li>
-		</ul>
 
 		<form id="parcelSearch" action="" method="GET" class="form-inline pull-right">
 			<div class="input-group">
@@ -88,7 +104,7 @@
 	<main>
 
 		<div class="row">
-			<div id="result-container" class="col-md-4 hidden">
+			<div id="result-container" class="col-md-6 hidden">
 				<div id="results"></div>
 			</div>
 			<div id="map-container" class="col-md-12">
@@ -182,8 +198,21 @@
     		return L.circle(latlng, {radius: diameter * 5, color: "#68B684"})
     	}
     	
+    }),
+    neighbourhoods = L.esri.featureLayer({
+    	url: "http://maps.ottawa.ca/arcgis/rest/services/Neighbourhoods/MapServer/1"
+    }),
+    hospitals = L.esri.featureLayer({
+    	url: "http://maps.ottawa.ca/arcgis/rest/services/Hospitals/MapServer/0"
     });
 
+    hospitals.bindPopup(function(feature){
+    	return feature.feature.properties.NAME
+    })
+
+    neighbourhoods.bindPopup(function(feature){
+    	return feature.feature.properties.NAMES
+    })
 
     trees.bindPopup(function(featureLayer){
     	console.log(featureLayer)
@@ -193,13 +222,17 @@
 
     var baseMaps = {"Road": road, "Google Road": googleRoad, "Google Sat": googleSat};
 
-    var overlays = {"Streets": roads, 'wards': wards, 'Sewer and Water': waterSewer, "zoning": zoningMap, "Parcels": parcelMap, "Cycling": cycling, "Transit": transit, "Trees": trees };
+    var overlays = {"Streets": roads, 'wards': wards, 'Sewer and Water': waterSewer, "zoning": zoningMap, "Parcels": parcelMap, "Cycling": cycling, "Transit": transit, "Trees": trees, "Neighbourhoods": neighbourhoods, "Hospitals": hospitals };
     
 	var map = L.map('map', {
 		layers: [road]
 	}).setView( [45.416667, -75.7], 15);
 
 	L.control.layers(baseMaps, overlays).addTo(map);
+
+	L.control.zoomBox({
+		modal: true
+	}).addTo(map);
 
 	var points;
 
@@ -274,13 +307,76 @@
 
    		}	
 
-   		$("#result-container").removeClass("hidden")
-   		$("#map-container").removeClass("col-md-12")
-   		$("#map-container").addClass("col-md-8")
+   		halfMap();
 
    		map.fitBounds(points.getBounds());
 	    }
 
+
+
+	var halfMap = function(){ 
+		$("#result-container").removeClass("hidden").show();
+		$("#map-container").addClass("col-md-6"); 
+		$("#map-container").removeClass("col-md-12", {duration: 2000});
+	}
+
+	var fullMap = function(){ 
+		$("#result-container").addClass("hidden").hide();
+		$("#map-container").addClass("col-md-12"); 
+		$("#map-container").removeClass("col-md-6");
+	}
+
+
+	L.Control.Contract = L.Control.extend({
+		_active: false,
+		options: {
+			position: "topleft",
+			modal: true,
+			className: 'leaflet-expand-icon collapse',
+			title: "shrink map"
+		},
+		onAdd: function(map){
+			console.log(map)
+			this._map = map;
+			this._container = L.DomUtil.create('div', 'leaflet-zoom-box-control leaflet-bar');
+			this._container.title = this.options.title;
+
+			var link = L.DomUtil.create('a', this.options.className, this._container);
+			link.href="#";
+
+			L.DomEvent
+				.on(this._container, 'click', function(){
+
+						if (this._active){
+							this._active = false;
+							fullMap();
+							// L.DomUtil.removeClass(this._container, 'expand')
+							// L.DomUtil.addClass(this._container, 'collapse')
+							map.invalidateSize();
+						} else{
+							halfMap();
+							this._active = true;
+							L.DomUtil.removeClass(this._container, 'collapse')
+							L.DomUtil.addClass(this._container, 'expand')
+							map.invalidateSize();
+						}
+					}, this);
+
+			return this._container;
+		},
+		activate: function(){
+			this._active = false
+			L.DomUtil.removeClass(this._container, 'expand')
+			L.DomUtil.addClass(this._container, 'collapse')
+			map.invalidateSize();
+		}
+	})
+
+	L.Control.contract = function(options){
+		return new L.Control.Contract(options);
+	}
+
+	L.Control.contract().addTo(map);
 	</script>
 
 </body>
