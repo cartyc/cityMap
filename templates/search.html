@@ -7,6 +7,7 @@
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>Property Search</title>
+
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.3/css/bootstrap.min.css" integrity="	sha384-MIwDKRSSImVFAZCVLtU0LMDdON6KVCrZHyVQQj6e8wIEJkW4tvwqXrbMIya1vriY" crossorigin="anonymous">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js" integrity="sha384-THPy051/pYDQGanwU6poAc/hOdQxjnOEXzbT+OuUAFqNqFjL+4IGLBgCJC3ZOShY" crossorigin="anonymous"></script>
 
@@ -35,56 +36,15 @@
 	<link rel="stylesheet" href="{% static "css/L.Control.ZoomBox.css" %}">
 	<script src="{% static "js/L.Control.ZoomBox.min.js" %}"></script>
 
+	{# Self style #}
+	<link rel="stylesheet" href="{% static "css/main.css" %}">
+
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-
-	<style>
-		html, body{
-	      height: 100%;
-		}
-    	#map { 
-    		position: relative; 
-    		min-height: calc(100vh - 55px);
-    		width: 100%;
-    	}
-
-    	#parcelSearch{
-    		min-width: 80%;
-    	}
-
-    	.hidden{
-    		visibility: hidden;
-    		padding: 0;
-    		height: 0
-    	}
-
-    	.popup{
-    		min-height: 100px;
-    		min-width: 300px;
-    	}
-
-		.leaflet-expand-icon{
-			position: relative;
-		}
-
-    	.leaflet-expand-icon.collapse::before {
-		    /*background: transparent no-repeat center center;*/
-	        font-family: FontAwesome;
-		    /*src: https://design.google.com/icons/#ic_crop_free*/
-		    content: "\f066";
-		}
-		
-		.leaflet-expand-icon.expand::before{
-			font-family: FontAwesome;
-			content: "\f065";
-		}
-
-	</style>
-</head>
 <body>
 	
-	<nav class="navbar navbar-full navbar-dark bg-faded" style="background-color: #6B818C">
+	<nav class="navbar navbar-full navbar-dark bg-faded" style="background-color: #083D77">
 		<a href="" class="navbar-brand">
 			Property Search
 		</a>
@@ -94,7 +54,7 @@
 				<input type="text" name="address_name" id="address_name" placeholder="Search Address/Pin..." class="form-control">		
 				<span class="input-group-btn">
 					<button class="btn btn-primary" type="submit">
-						<i class="fa fa-search" aria-hidden="true"></i>
+						<i id="search-button" class="fa fa-search" aria-hidden="true"></i>
 					</button>
 				</span>
 			</div>
@@ -103,281 +63,24 @@
 
 	<main>
 
-		<div class="row">
-			<div id="result-container" class="col-md-6 hidden">
-				<div id="results"></div>
-			</div>
-			<div id="map-container" class="col-md-12">
-				<div id="map"></div>				
-			</div>
+		<div class="container-fluid">
+			<div class="row">
+				<div id="result-container" class="hidden">
+					<div id="results"></div>
+				</div>
+				<div id="map-container" class="col-md-12">
+					<div id="map"></div>				
+				</div>
+			</div>			
 		</div>
+
+
 	</main>
 	<footer>
 		
 	</footer>
 
 	<script src="{% static "js/system.js" %}"></script>
-
-	<script>
-
-
-
-	var zoningLookUp = function(x,y, geomtry){
-
-		console.log(x,y);
-		console.log(geomtry);
-
-		if (geomtry){
-			console.log("geom")
-			var url = "http://maps.ottawa.ca/arcgis/rest/services/Zoning/MapServer/3/query?where=&text=&objectIds=&time=&geometry=" + JSON.stringify(geomtry) + "&geometryType=esriGeometryPolygon&inSR=&spatialRel=esriSpatialRelWithin&relationParam=&outFields=ZONINGTYPE%2CZONE_CODE%2CZONE_MAIN%2CPIN%2C+URL+&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=pjson"
-
-			var get = query(url);
-
-		} else {
-			var url = "http://maps.ottawa.ca/arcgis/rest/services/Zoning/MapServer/3/query?where=&text=&objectIds=&time=&geometry=" + x + "," + y +"&geometryType=esriGeometryPoint&inSR=&spatialRel=esriSpatialRelWithin&relationParam=&outFields=ZONINGTYPE%2CZONE_CODE%2CZONE_MAIN%2CPIN%2C+URL+&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=pjson"
-			var get = query(url);			
-		}
-
-
-		try{
-			var attr = get[0].attributes
-		} catch (err){
-			var  attr = ''
-		}
-
-		return attr
-	}
-
-	// External
-	//http://maps.ottawa.ca/arcgis/rest/services/Property_Parcels/MapServer
-
-
-		//Mapping
-
-	var road = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png',{
-      maxZoom: 19,
-      attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
-    }),
-    googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s,m&x={x}&y={y}&z={z}',{
-	    maxZoom: 21,
-	    subdomains:['mt0','mt1','mt2','mt3']
-	}),
-    googleRoad = L.tileLayer('http://{s}.google.com/vt/lyrs=r,m&x={x}&y={y}&z={z}',{
-	    maxZoom: 20,
-	    subdomains:['mt0','mt1','mt2','mt3']
-	});
-
-
-    var roads = L.esri.dynamicMapLayer({
-    	url: "http://maps.ottawa.ca/arcgis/rest/services/Streets/MapServer/"
-    }),
-   	cycling = L.esri.dynamicMapLayer({
-   		url: "http://maps.ottawa.ca/arcgis/rest/services/CyclingMap/MapServer/"
-   	}),
-    wards = L.esri.dynamicMapLayer({
-    	url: "http://maps.ottawa.ca/arcgis/rest/services/Wards/MapServer/"
-    }),
-    waterSewer = L.esri.dynamicMapLayer({
-    	url: "http://maps.ottawa.ca/arcgis/rest/services/WaterAndSewer/MapServer"
-    }),
-    zoningMap = L.esri.dynamicMapLayer({
-    	url: "http://maps.ottawa.ca/arcgis/rest/services/Zoning/MapServer",
-    	opacity: .7
-    }),
-    parcelMap = L.esri.dynamicMapLayer({
-    	url: "http://maps.ottawa.ca/arcgis/rest/services/Property_Parcels/MapServer/"
-    }),
-    transit = L.esri.dynamicMapLayer({
-    	url: "http://maps.ottawa.ca/arcgis/rest/services/TransitServices/MapServer"
-    }),
-    trees = L.esri.featureLayer({
-    	url: "http://maps.ottawa.ca/arcgis/rest/services/Miscellaneous/MapServer/1",
-    	pointToLayer: function(geoJson, latlng) {
-    		console.log(geoJson)
-    		var diameter = geoJson.properties.DBH / 100;
-    		return L.circle(latlng, {radius: diameter * 5, color: "#68B684"})
-    	}
-    	
-    }),
-    neighbourhoods = L.esri.featureLayer({
-    	url: "http://maps.ottawa.ca/arcgis/rest/services/Neighbourhoods/MapServer/1"
-    }),
-    hospitals = L.esri.featureLayer({
-    	url: "http://maps.ottawa.ca/arcgis/rest/services/Hospitals/MapServer/0"
-    });
-
-    hospitals.bindPopup(function(feature){
-    	return feature.feature.properties.NAME
-    })
-
-    neighbourhoods.bindPopup(function(feature){
-    	return feature.feature.properties.NAMES
-    })
-
-    trees.bindPopup(function(featureLayer){
-    	console.log(featureLayer)
-    	var results = featureLayer.feature.properties;
-    	return "<div class='container popup'><div class='row'><div class='col-md-5'>Species</div><div class='col-md-7'>" + results['SPECIES'] + "</div></div><div class='row'><div class='col-md-5'>Diameter (cm)</div><div class='col-md-7'>" + results['DBH'] + "</div></div><div class='row'><div class='col-md-5'>Trunk Structure</div><div class='col-md-7'>" + results['TRUNCSTRCT'] + "</div></div></div>" ;
-    });
-
-    var baseMaps = {"Road": road, "Google Road": googleRoad, "Google Sat": googleSat};
-
-    var overlays = {"Streets": roads, 'wards': wards, 'Sewer and Water': waterSewer, "zoning": zoningMap, "Parcels": parcelMap, "Cycling": cycling, "Transit": transit, "Trees": trees, "Neighbourhoods": neighbourhoods, "Hospitals": hospitals };
-    
-	var map = L.map('map', {
-		layers: [road]
-	}).setView( [45.416667, -75.7], 15);
-
-	L.control.layers(baseMaps, overlays).addTo(map);
-
-	L.control.zoomBox({
-		modal: true
-	}).addTo(map);
-
-	var points;
-
-
-	var getCurrentLocation = function(position){
-
-	    points = L.featureGroup().addTo(map);
-
-		var startPos;
-		var geoSuccess = function(position){
-
-	    	// try{
-	    	// 	console.log("remove")
-		    // 	map.removeLayer(points)
-	    	// } catch(err){
-	    	// 	console.error(err)
-	    	// }
-			startPos = position;
-			var lat = position.coords.latitude,
-			lng = position.coords.longitude;
-			var marker = L.marker([lat, lng]);
-
-			points.addLayer(marker)
-
-			map.fitBounds(points.getBounds());
-		}
-
-		if (navigator.geolocation){
-			try{
-				navigator.geolocation.getCurrentPosition(geoSuccess);
-
-			} catch(err){
-				console.error(err)
-			}
-		} else{
-			console.log("no geo");
-		}
-	}
-
-    function plotResults(markers){
-
-    	try{
-    		console.log("remove")
-	    	map.removeLayer(points)
-    	} catch(err){
-    		console.error(err)
-    	}
-
-
-	    
-	    points = L.featureGroup().addTo(map);
-
-   		for( var i = 0; i < markers.length; i++){
-
-	   		//Convert the coords
-	   		var fromCoords = new proj4.Proj('EPSG:3857');
-
-	   		var toCoords = new proj4.Proj('EPSG:4326')
-
-	   		var output = proj4(fromCoords, toCoords, markers[i].coordinates )
-
-	   		var latlng = [output[1], output[0]];
-
-	   		marker = L.marker(latlng);
-	   		 marker.bindPopup(
-                "<div class='row'><div class='col-md-12'><h4>" + markers[i]["fullAddress"] +"</h4></div></div><div class='row'><table class='table'><tr><td>Pin</td><td>" + markers[i]["pin"] +"</td></tr>\
-                <tr><td>Zoning</td><td><a href='http://www.ottawa.ca" + markers[i]["zoneLink"] +"' target='_blank'>" +markers[i]["zoning"] + "</a></td></tr>\
-                <tr><td>Ward</td><td>" + markers[i]["ward"] +"</td></tr>\
-                </table></div>", markers[i]);
-
-	   		points.addLayer(marker);
-
-   		}	
-
-   		halfMap();
-
-   		map.fitBounds(points.getBounds());
-	    }
-
-
-
-	var halfMap = function(){ 
-		$("#result-container").removeClass("hidden").show();
-		$("#map-container").addClass("col-md-6"); 
-		$("#map-container").removeClass("col-md-12", {duration: 2000});
-	}
-
-	var fullMap = function(){ 
-		$("#result-container").addClass("hidden").hide();
-		$("#map-container").addClass("col-md-12"); 
-		$("#map-container").removeClass("col-md-6");
-	}
-
-
-	L.Control.Contract = L.Control.extend({
-		_active: false,
-		options: {
-			position: "topleft",
-			modal: true,
-			className: 'leaflet-expand-icon collapse',
-			title: "shrink map"
-		},
-		onAdd: function(map){
-			console.log(map)
-			this._map = map;
-			this._container = L.DomUtil.create('div', 'leaflet-zoom-box-control leaflet-bar');
-			this._container.title = this.options.title;
-
-			var link = L.DomUtil.create('a', this.options.className, this._container);
-			link.href="#";
-
-			L.DomEvent
-				.on(this._container, 'click', function(){
-
-						if (this._active){
-							this._active = false;
-							fullMap();
-							// L.DomUtil.removeClass(this._container, 'expand')
-							// L.DomUtil.addClass(this._container, 'collapse')
-							map.invalidateSize();
-						} else{
-							halfMap();
-							this._active = true;
-							L.DomUtil.removeClass(this._container, 'collapse')
-							L.DomUtil.addClass(this._container, 'expand')
-							map.invalidateSize();
-						}
-					}, this);
-
-			return this._container;
-		},
-		activate: function(){
-			this._active = false
-			L.DomUtil.removeClass(this._container, 'expand')
-			L.DomUtil.addClass(this._container, 'collapse')
-			map.invalidateSize();
-		}
-	})
-
-	L.Control.contract = function(options){
-		return new L.Control.Contract(options);
-	}
-
-	L.Control.contract().addTo(map);
-	</script>
 
 </body>
 
