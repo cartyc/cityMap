@@ -24,6 +24,12 @@
 	<!-- Load Esri Leaflet from CDN -->
 	<script src="https://cdn.jsdelivr.net/leaflet.esri/2.0.0/esri-leaflet.js"></script>
 
+	{# font awesome markers #}
+	<link rel="stylesheet" href="{% static "css/leaflet.awesome-markers.css" %}">
+
+	<script src="{% static "js/leaflet.awesome-markers.min.js" %}"></script>
+
+
 	<!-- ESRI GeoCoder -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/leaflet.esri.geocoder/2.1.0/esri-leaflet-geocoder.css">
 	<script src="https://cdn.jsdelivr.net/leaflet.esri.geocoder/2.1.0/esri-leaflet-geocoder.js"></script>
@@ -111,6 +117,18 @@
 			return results
 		}
 
+
+		function neighbourhoodLookUp(coords){
+			// Identiify propery ward location
+			var coords = coords.x + "," + coords.y;
+
+			var url = "http://maps.ottawa.ca/arcgis/rest/services/Neighbourhoods/MapServer/1/query?where=&text=&objectIds=&time=&geometry=" + coords + "&geometryType=esriGeometryPoint&inSR=&spatialRel=esriSpatialRelWithin&relationParam=&outFields=&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=pjson"
+
+			var results = query(url)
+
+			return results
+		}
+
 		function localHospitals(coords){
 			// Find nearest hospital to location
 			var coords = coords.x + " " + coords.y;
@@ -125,27 +143,23 @@
 		}
 
 		function propertyTrees(geom){
-			console.log(geom)
 
 			var url = "http://maps.ottawa.ca/arcgis/rest/services/Miscellaneous/MapServer/1/query?where=&text=&objectIds=&time=&geometry="+ geom.rings+"&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelContains&relationParam=&outFields=SPECIES&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=pjson";
 
-			console.log(url)
+			var results = query(url)
 
-
-			return query(url)
+			return results
 		}
 
 		function propertyModal(id){
 
 			// Create Property Detail PopUp from select result
-			console.log(id);
 
 			var url = "http://maps.ottawa.ca/arcgis/rest/services/Property_Parcels/MapServer/0/query?where=OBJECTID%3D" +id +"&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=FULLADDR%2C+POINTTYPE%2C+WARD%2C+OBJECTID&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=pjson"
 
 
 			property = query(url);
 			point = property[0].geometry
-			console.log(point)
 
 			ward = wardLookUp(point);
 			// hospitals = localHospitals(point);
@@ -153,17 +167,18 @@
 			var zoning = zoningLookUp(property[0].geometry.x, property[0].geometry.y ),
 			pin = pinGeoLookUp(property[0].geometry.x, property[0].geometry.y),
 			schoolDistrict = "School District",
-			trees = propertyTrees(pin[0].geometry)
-
-			console.log(trees)
+			trees = propertyTrees(pin[0].geometry),
+			neighbourhood = neighbourhoodLookUp(point);
 
 			var treeNames = []
-			for (var i = 0; i < trees.length; i++){
-				treeNames.push(trees[i].attributes.SPECIES);
+			if (trees){
+				for (var i = 0; i < trees.length; i++){
+					treeNames.push(trees[i].attributes.SPECIES);
+				}
 			}
 
 			// Change Title and clear body
-			$(".modal-title").text(property[0].attributes.FULLADDR);
+			$(".modal-title").html(property[0].attributes.FULLADDR + " <small class='text-muted'>" + neighbourhood[0].attributes.NAMES + "</small>");
 			$(".modal-body").empty();
 
 			// for ( var i = 0; i < hospitals.length; i++){

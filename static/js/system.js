@@ -225,7 +225,6 @@ transit = L.esri.dynamicMapLayer({
 trees = L.esri.featureLayer({
 	url: "http://maps.ottawa.ca/arcgis/rest/services/Miscellaneous/MapServer/1",
 	pointToLayer: function(geoJson, latlng) {
-		console.log(geoJson)
 		var diameter = geoJson.properties.DBH / 100;
 		return L.circle(latlng, {radius: diameter * 5, color: "#68B684"})
 	}
@@ -235,11 +234,28 @@ neighbourhoods = L.esri.featureLayer({
 	url: "http://maps.ottawa.ca/arcgis/rest/services/Neighbourhoods/MapServer/1"
 }),
 hospitals = L.esri.featureLayer({
-	url: "http://maps.ottawa.ca/arcgis/rest/services/Hospitals/MapServer/0"
+	url: "http://maps.ottawa.ca/arcgis/rest/services/Hospitals/MapServer/0",
+	pointToLayer: function(geoJson, latlng){
+		return L.marker(latlng, {
+			icon: L.AwesomeMarkers.icon({
+		        icon: 'h-square',
+		        prefix: 'fa',
+		        markerColor: 'red',
+		        iconColor: '#fff'
+		    })
+	}).addTo(map)}
 }),
-schools = L.esri.dynamicMapLayer({
-	url: "http://maps.ottawa.ca/arcgis/rest/services/Schools/MapServer",
-	layers: [0,1,2]
+schools = L.esri.featureLayer({
+	url: "http://maps.ottawa.ca/arcgis/rest/services/Schools/MapServer/1",
+	pointToLayer: function(geoJson, latlng){
+		return L.marker(latlng, {
+			icon: L.AwesomeMarkers.icon({
+		        icon: 'graduation-cap',
+		        prefix: 'fa',
+		        markerColor: 'purple',
+		        iconColor: '#fff'
+		    })
+	}).addTo(map)}
 });
 
 hospitals.bindPopup(function(feature){
@@ -248,6 +264,16 @@ hospitals.bindPopup(function(feature){
 
 neighbourhoods.bindPopup(function(feature){
 	return feature.feature.properties.NAMES
+});
+
+schools.bindPopup(function(feature){
+	console.log(feature.feature.properties)
+	var feature = feature.feature.properties;
+	var body = "<div class='row'><div class='col-md-12 h4'>" + feature.NAME +"</div></div>\
+	<div class='row'><div class='col-md-12'>" + feature.NUM + " " + feature.STREET + "</div></div>\
+	<div class='row'><div class='col-md-3'>Category</div><div class='col-md-9'>"+ feature.CATEGORY + "</div></div>\
+	<div class='row'><div class='col-md-3'>Board</div><div class='col-md-9'>" + feature.FULL_BOARD +"</div></div>"
+	return body
 })
 
 trees.bindPopup(function(featureLayer){
