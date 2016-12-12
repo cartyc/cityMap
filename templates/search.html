@@ -172,7 +172,11 @@
 			// }
 
 			// Put Results of search into body
-			var body = "<div class='row'>\
+			var body = "\
+			<div class='row'>\
+				<div class='col-md-4'>Parcel Area</div><div class='col-md-8'>"+ pin[0].attributes.Shape_Area.toLocaleString() + " m2</div>\
+			</div>\
+			<div class='row'>\
 				<div class='col-md-4'>Zoning</div><div class='col-md-8'>"+ zoning.ZONE_CODE + " <a href='http://www.ottawa.ca" + zoning.URL + "' target='_blank'>Reference</a></div>\
 			</div>\
 			<div class='row'>\
