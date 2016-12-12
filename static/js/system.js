@@ -256,10 +256,43 @@ schools = L.esri.featureLayer({
 		        iconColor: '#fff'
 		    })
 	}).addTo(map)}
+}),
+artsandculture = L.esri.featureLayer({
+	url: "http://maps.ottawa.ca/arcgis/rest/services/City_Facilities/MapServer/0",
+	pointToLayer: function(geoJson, latlng){
+		return L.marker(latlng, {
+			icon: L.AwesomeMarkers.icon({
+				icon: 'language',
+				prefix: 'fa',
+				markerColor: 'red',
+				iconColor: '#fff'
+			})
+		})
+	}
+}),
+recreation = L.esri.featureLayer({
+	url: "http://maps.ottawa.ca/arcgis/rest/services/City_Facilities/MapServer/5",
+	pointToLayer: function(geoJson, latlng){
+		return L.marker(latlng, {
+			icon: L.AwesomeMarkers.icon({
+				icon: 'building',
+				prefix: 'fa',
+				markerColor: 'purple',
+				iconColor: "#fff"
+			})
+		})
+	}
 });
 
 hospitals.bindPopup(function(feature){
-	return feature.feature.properties.NAME
+	console.log(feature.feature.properties)
+	var feature = feature.feature.properties;
+	var body = "<div class='row'><div class='col-md-12 h4'>" + feature.NAME + "</div></div>\
+		<div class='row'><div class='col-md-12'>" + feature.ADDRESS + "</div></div>\
+		<div class='row'><div class='col-md-12'><a href='" + feature.LINK_EN + "'>Website</a></div></div>\
+	"
+
+	return body
 })
 
 neighbourhoods.bindPopup(function(feature){
@@ -267,7 +300,6 @@ neighbourhoods.bindPopup(function(feature){
 });
 
 schools.bindPopup(function(feature){
-	console.log(feature.feature.properties)
 	var feature = feature.feature.properties;
 	var body = "<div class='row'><div class='col-md-12 h4'>" + feature.NAME +"</div></div>\
 	<div class='row'><div class='col-md-12'>" + feature.NUM + " " + feature.STREET + "</div></div>\
@@ -277,14 +309,36 @@ schools.bindPopup(function(feature){
 })
 
 trees.bindPopup(function(featureLayer){
-	console.log(featureLayer)
 	var results = featureLayer.feature.properties;
 	return "<div class='container popup'><div class='row'><div class='col-md-5'>Species</div><div class='col-md-7'>" + results['SPECIES'] + "</div></div><div class='row'><div class='col-md-5'>Diameter (cm)</div><div class='col-md-7'>" + results['DBH'] + "</div></div><div class='row'><div class='col-md-5'>Trunk Structure</div><div class='col-md-7'>" + results['TRUNCSTRCT'] + "</div></div></div>" ;
 });
 
+artsandculture.bindPopup(function(feature){
+	var feature = feature.feature.properties;
+	var body = '<div class="row"><div class="col-md-21">' + feature.BUSINESS_ENTITY_DESC + '</div></div>\
+	<div class="row"><div class="col-md-21">' + feature.BUILDING_TYPE + '</div></div>\
+	'
+	return body
+})
+
+recreation.bindPopup(function(feature){
+	var feature = feature.feature.properties;
+	var body = '<div class="row"><div class="col-md-21">' + feature.BUSINESS_ENTITY_DESC + '</div></div>\
+	<div class="row"><div class="col-md-21">' + feature.BUILDING_TYPE + '</div></div>\
+	'
+	return body
+})
+
 var baseMaps = {"Road": road, "Google Road": googleRoad, "Google Sat": googleSat};
 
-var overlays = {"Streets": roads, 'wards': wards, 'Sewer and Water': waterSewer, "zoning": zoningMap, "Parcels": parcelMap, "Cycling": cycling, "Transit": transit, "Trees": trees, "Neighbourhoods": neighbourhoods, "Hospitals": hospitals, "Schools": schools };
+var overlays = {
+	"Streets": roads, 'wards': wards, 
+	'Sewer and Water': waterSewer, "zoning": zoningMap, 
+	"Parcels": parcelMap, "Cycling": cycling, "Transit": transit, 
+	"Trees": trees, "Neighbourhoods": neighbourhoods, 
+	"Hospitals": hospitals, "Schools": schools,
+	"Arts and Culture": artsandculture,
+	"Recreation": recreation };
 
 var map = L.map('map', {
 	layers: [road]
