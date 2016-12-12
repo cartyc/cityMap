@@ -65,7 +65,7 @@
 
 		<div class="container-fluid">
 			<div class="row">
-				<div id="result-container" class="hidden">
+				<div id="result-container" class="hidden container">
 					<div id="results"></div>
 				</div>
 				<div id="map-container" class="col-md-12">
@@ -76,11 +76,119 @@
 
 
 	</main>
+
+	{# Modal #}
+	<div class="modal" id="property-data" role="dialog" aria-labelledby="propertyData" aria-hidden="true">
+			<div class="modal-dialog modal-lg" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title"></h4>
+					</div>
+					<div class="modal-body"></div>
+				</div>
+			</div>
+	</div>
+
 	<footer>
 		
 	</footer>
 
 	<script src="{% static "js/system.js" %}"></script>
+
+	<script>
+
+		function wardLookUp(coords){
+			// Identiify propery ward location
+			var coords = coords.x + "," + coords.y;
+
+			var url = "http://maps.ottawa.ca/arcgis/rest/services/Wards/MapServer/0/query?where=&text=&objectIds=&time=&geometry=" + coords + "&geometryType=esriGeometryPoint&inSR=&spatialRel=esriSpatialRelWithin&relationParam=&outFields=&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=pjson"
+
+			var results = query(url)
+
+			return results
+		}
+
+		function localHospitals(coords){
+			// Find nearest hospital to location
+			var coords = coords.x + " " + coords.y;
+
+			var url = "http://maps.ottawa.ca/arcgis/rest/services/Hospitals/MapServer/0/query?where=&text=&objectIds=&time=&geometry="+ coords +"&geometryType=esriGeometryPoint&inSR=&spatialRel=esriSpatialRelRelation&relationParam=near&outFields=&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=pjson"
+
+			console.log(url)
+
+			var results = query(url);
+
+			return results;
+		}
+
+		function propertyTrees(geom){
+			console.log(geom)
+
+			var url = "http://maps.ottawa.ca/arcgis/rest/services/Miscellaneous/MapServer/1/query?where=&text=&objectIds=&time=&geometry="+ geom.rings+"&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelContains&relationParam=&outFields=SPECIES&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=pjson";
+
+			console.log(url)
+
+
+			return query(url)
+		}
+
+		function propertyModal(id){
+
+			// Create Property Detail PopUp from select result
+			console.log(id);
+
+			var url = "http://maps.ottawa.ca/arcgis/rest/services/Property_Parcels/MapServer/0/query?where=OBJECTID%3D" +id +"&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=FULLADDR%2C+POINTTYPE%2C+WARD%2C+OBJECTID&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=pjson"
+
+
+			property = query(url);
+			point = property[0].geometry
+			console.log(point)
+
+			ward = wardLookUp(point);
+			// hospitals = localHospitals(point);
+
+			var zoning = zoningLookUp(property[0].geometry.x, property[0].geometry.y ),
+			pin = pinGeoLookUp(property[0].geometry.x, property[0].geometry.y),
+			schoolDistrict = "School District",
+			trees = propertyTrees(pin[0].geometry)
+
+			console.log(trees)
+
+			var treeNames = []
+			for (var i = 0; i < trees.length; i++){
+				treeNames.push(trees[i].attributes.SPECIES);
+			}
+
+			// Change Title and clear body
+			$(".modal-title").text(property[0].attributes.FULLADDR);
+			$(".modal-body").empty();
+
+			// for ( var i = 0; i < hospitals.length; i++){
+			// 	var hospital = hospitals[i].attributes.NAME;
+			// 	$(".modal-body").append("<p>" + hospital + "</p>");
+			// }
+
+			// Put Results of search into body
+			var body = "<div class='row'>\
+				<div class='col-md-4'>Zoning</div><div class='col-md-8'>"+ zoning.ZONE_CODE + " <a href='http://www.ottawa.ca" + zoning.URL + "' target='_blank'>Reference</a></div>\
+			</div>\
+			<div class='row'>\
+				<div class='col-md-4'>School District</div><div class='col-md-8'>"+ schoolDistrict + "</div>\
+			</div>\
+			<div class='row'>\
+				<div class='col-md-4'>Tree's On Property</div><div class='col-md-8'>"+ treeNames + "</div>\
+			</div>"
+
+			$(".modal-body").append(body);
+
+			$('#property-data').modal('toggle')
+
+		}
+
+	</script>
 
 </body>
 

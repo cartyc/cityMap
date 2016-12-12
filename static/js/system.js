@@ -23,7 +23,7 @@ function searchGeoOttawa(){
 
 
 		//Append Table
-		$("#results").append("<table id='rtable' class='table'><thead><tr><th>Address</th><th>Pin#</th><th>Zoning</th><th>Ward</th></tr></thead><tbody id='resultbody'></tbody></table>");
+		// $("#results").append("<table id='rtable' class='table'><thead><tr><th>Address</th><th>Pin#</th><th>Zoning</th><th>Ward</th></tr></thead><tbody id='resultbody'></tbody></table>");
 
 		// Determine if search for pin or address by checking if number
 		// If number that means pin
@@ -40,25 +40,32 @@ function searchGeoOttawa(){
 				ward = feature[i].attributes.WARD,
 				fulladdress = feature[i].attributes.ADDRESS_NUMBER + ' ' + feature[i].attributes.ROAD_NAME + ' ' + feature[i].attributes.SUFFIX + ' ' + ( (feature[i].attributes.DIR == null ) ? '' : feature[i].attributes.DIR);
 
+
 				$("#resultbody").append("<tr><td>" + fulladdress + "</td><td>" + pin + "</td><td><a href='http://www.ottawa.ca" + zoningLink +"' target='_blank'>"+ zoneCode + "</a></td><td>" + ward + "</td></tr>")
 			}
 
 		} else {
 			var feature = addressSearch(address)
 			for (var i = 0; i < feature.length; i++){
+
+				console.log(feature[i])
+
 				var fulladdress = feature[i].attributes.FULLADDR,
-				pin = feature[i].attributes.PIN_NUMBER;
-				var pin = pinGeoLookUp(feature[i].geometry.x, feature[i].geometry.y)
+				pin = pinGeoLookUp(feature[i].geometry.x, feature[i].geometry.y)[0].attributes.PIN_NUMBER;
 				var zoning = zoningLookUp(feature[i].geometry.x, feature[i].geometry.y),
 				zoneCode = zoning.ZONE_CODE,
 				zoningLink = zoning.URL,
-				ward = feature[i].attributes.WARD;
+				ward = feature[i].attributes.WARD,
+				id = feature[i].attributes.OBJECTID;
 
 				// Add Points to dict for mapping
 				var point = { "coordinates" : [feature[i].geometry.x, feature[i].geometry.y], "fullAddress": fulladdress, "pin": pin, "zoning": zoneCode, "zoneLink": zoningLink, "ward": ward };
 				points.push(point);
 
-				$("#resultbody").append("<tr><td>" + fulladdress + "</td><td>" + pin + "</td><td><a href='http://www.ottawa.ca" + zoningLink +"' target='_blank'>"+ zoneCode + "</a></td><td>" + ward + "</td></tr>")
+				var address = "<div class='row address' id='" + id + "'><div class='col-md-12'><div class='row'><div class='col-md-12 h4'>"+ fulladdress + "</div></div><div classs='row'><div class='col-md-4'> Zoning: " + zoneCode + "</div><div class='col-md-4'> Ward # " + ward + "</div></div></div><div class='row'><div class='col-md-12'><button class='btn btn-secondart pull-md-right' onClick='propertyModal(" + id + ")'>Detail</button></div></div></div>"
+
+				$("#results").append(address)			
+				// $("#resultbody").append("<tr><td>" + fulladdress + "</td><td>" + pin + "</td><td><a href='http://www.ottawa.ca" + zoningLink +"' target='_blank'>"+ zoneCode + "</a></td><td>" + ward + "</td></tr>")
 			}
 
 		}
@@ -111,7 +118,7 @@ function searchGeoOttawa(){
 
 	// address search
 	var addressSearch = function(address){
-		var url = "http://maps.ottawa.ca/arcgis/rest/services/Property_Parcels/MapServer/0/query?where=FULLADDR+Like%27%25" + address + "%25%27&text=&objectIds=&time=&geometry=&geometryType=esriGeometryPoint&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=FULLADDR%2C+POINTTYPE%2C+WARD&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=pjson"
+		var url = "http://maps.ottawa.ca/arcgis/rest/services/Property_Parcels/MapServer/0/query?where=FULLADDR+Like%27%25" + address + "%25%27&text=&objectIds=&time=&geometry=&geometryType=esriGeometryPoint&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=FULLADDR%2C+POINTTYPE%2C+WARD%2C+OBJECTID&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=pjson"
 
 		var feature = query(url);
 
@@ -126,7 +133,7 @@ function searchGeoOttawa(){
 
 		var get = query(url);
 
-		return get[0].attributes.PIN_NUMBER
+		return get
 	}
 
 	// External
@@ -229,6 +236,10 @@ neighbourhoods = L.esri.featureLayer({
 }),
 hospitals = L.esri.featureLayer({
 	url: "http://maps.ottawa.ca/arcgis/rest/services/Hospitals/MapServer/0"
+}),
+schools = L.esri.dynamicMapLayer({
+	url: "http://maps.ottawa.ca/arcgis/rest/services/Schools/MapServer",
+	layers: [0,1,2]
 });
 
 hospitals.bindPopup(function(feature){
@@ -247,7 +258,7 @@ trees.bindPopup(function(featureLayer){
 
 var baseMaps = {"Road": road, "Google Road": googleRoad, "Google Sat": googleSat};
 
-var overlays = {"Streets": roads, 'wards': wards, 'Sewer and Water': waterSewer, "zoning": zoningMap, "Parcels": parcelMap, "Cycling": cycling, "Transit": transit, "Trees": trees, "Neighbourhoods": neighbourhoods, "Hospitals": hospitals };
+var overlays = {"Streets": roads, 'wards': wards, 'Sewer and Water': waterSewer, "zoning": zoningMap, "Parcels": parcelMap, "Cycling": cycling, "Transit": transit, "Trees": trees, "Neighbourhoods": neighbourhoods, "Hospitals": hospitals, "Schools": schools };
 
 var map = L.map('map', {
 	layers: [road]

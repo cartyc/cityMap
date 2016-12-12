@@ -16,6 +16,12 @@ html, body{
 	min-width: 80%;
 }
 
+.address{
+	margin: 10px;
+	border-bottom: 1px solid #9E9E9E;
+	padding: 5px;
+}
+
 .hidden{
 	visibility: hidden;
 	padding: 0;
