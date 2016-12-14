@@ -5,7 +5,11 @@
 <html>
 
 <head>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 	<title>Property Search</title>
 
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.3/css/bootstrap.min.css" integrity="	sha384-MIwDKRSSImVFAZCVLtU0LMDdON6KVCrZHyVQQj6e8wIEJkW4tvwqXrbMIya1vriY" crossorigin="anonymous">
@@ -18,8 +22,8 @@
 
 	<!-- Leaftlet -->
 	<!-- Load Leaflet from CDN-->
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/leaflet/1.0.0-rc.1/leaflet.css" />
-	<script src="https://cdn.jsdelivr.net/leaflet/1.0.0-rc.1/leaflet-src.js"></script>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
+	<script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
 
 	<!-- Load Esri Leaflet from CDN -->
 	<script src="https://cdn.jsdelivr.net/leaflet.esri/2.0.0/esri-leaflet.js"></script>
@@ -45,9 +49,10 @@
 	{# Self style #}
 	<link rel="stylesheet" href="{% static "css/main.css" %}">
 
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+	{# Grouped layers #}
+	<link rel="stylesheet" href="{% static "css/leaflet.groupedlayercontrol.min.css" %}">
+	<script src='{% static "js/leaflet.groupedlayercontrol.min.js" %}'></script>
 <body>
 	
 	<nav class="navbar navbar-full navbar-dark bg-faded" style="background-color: #083D77">

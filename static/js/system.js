@@ -180,11 +180,11 @@ var zoningLookUp = function(x,y, geomtry){
 		return attr
 	}
 
-	// External
-	//http://maps.ottawa.ca/arcgis/rest/services/Property_Parcels/MapServer
+// External
+//http://maps.ottawa.ca/arcgis/rest/services/Property_Parcels/MapServer
 
-
-	//Mapping
+//////////////
+// Base Maps
 
 var road = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png',{
   maxZoom: 19,
@@ -200,14 +200,23 @@ googleRoad = L.tileLayer('http://{s}.google.com/vt/lyrs=r,m&x={x}&y={y}&z={z}',{
 });
 
 
+/////////////////////////////
+// Layers
+
 var roads = L.esri.dynamicMapLayer({
 	url: "http://maps.ottawa.ca/arcgis/rest/services/Streets/MapServer/"
 }),
-	cycling = L.esri.dynamicMapLayer({
-		url: "http://maps.ottawa.ca/arcgis/rest/services/CyclingMap/MapServer/"
-	}),
-wards = L.esri.dynamicMapLayer({
-	url: "http://maps.ottawa.ca/arcgis/rest/services/Wards/MapServer/"
+cycling_existing = L.esri.featureLayer({
+	url: "http://maps.ottawa.ca/arcgis/rest/services/CyclingMap/MapServer/3"
+}),
+cycling_mountain = L.esri.featureLayer({
+	url: "http://maps.ottawa.ca/arcgis/rest/services/CyclingMap/MapServer/17"
+}),
+cycling_winter = L.esri.featureLayer({
+	url: "http://maps.ottawa.ca/arcgis/rest/services/CyclingMap/MapServer/4"
+}),
+wards = L.esri.featureLayer({
+	url: "http://maps.ottawa.ca/arcgis/rest/services/Wards/MapServer/0"
 }),
 waterSewer = L.esri.dynamicMapLayer({
 	url: "http://maps.ottawa.ca/arcgis/rest/services/WaterAndSewer/MapServer"
@@ -284,6 +293,29 @@ recreation = L.esri.featureLayer({
 	}
 });
 
+
+/////////////////////////////////////
+// PopUps
+
+wards.bindPopup(function(feature){
+	var feature = feature.feature.properties
+
+	var body = "\
+	<div class='container'>\
+		<div class='row'>\
+			<div class='col-md-5'>Ward</div>\
+			<div class='col-md-7'>" +
+				feature.WARD_EN +
+			"</div>\
+		</div>\
+		<div class='row'>\
+			<div class='col-md-5'>Councillor</div>\
+			<div class='col-md-7'>" +
+				feature.COUNCILLOR + "</div></div><div class='row'><div class='col-md-5'>Ward Website</div><div class='col-md-7'><a href='" + feature.LINK_EN + "' target='_blank'>Link</a></div></div></div>"
+
+	return body
+})
+
 hospitals.bindPopup(function(feature){
 	console.log(feature.feature.properties)
 	var feature = feature.feature.properties;
@@ -329,22 +361,45 @@ recreation.bindPopup(function(feature){
 	return body
 })
 
+
+////////////
+// Overlays
+
+
 var baseMaps = {"Road": road, "Google Road": googleRoad, "Google Sat": googleSat};
 
-var overlays = {
-	"Streets": roads, 'wards': wards, 
-	'Sewer and Water': waterSewer, "zoning": zoningMap, 
-	"Parcels": parcelMap, "Cycling": cycling, "Transit": transit, 
-	"Trees": trees, "Neighbourhoods": neighbourhoods, 
-	"Hospitals": hospitals, "Schools": schools,
-	"Arts and Culture": artsandculture,
-	"Recreation": recreation };
+
+var groupedOverlays = {
+	"Property": {
+		"Streets": roads, 
+		"Parcels": parcelMap, 	
+ 		"Zoning": zoningMap,
+		'Wards': wards,  		
+ 		"Neighbourhoods": neighbourhoods
+	},
+	"Facilities": {
+		"Hospitals": hospitals, 
+		"Schools": schools,
+		"Arts and Culture": artsandculture,		
+		"Recreation": recreation
+	},
+	"Cycling": {
+		"Existing": cycling_existing,
+		"Mountain Bike": cycling_mountain,
+		"Winter": cycling_winter
+	},
+	"Misc":{
+		"Transit": transit,
+ 		'Sewer and Water': waterSewer, 
+		"Trees": trees,
+	}
+}
 
 var map = L.map('map', {
 	layers: [road]
 }).setView( [45.416667, -75.7], 15);
 
-L.control.layers(baseMaps, overlays).addTo(map);
+L.control.groupedLayers(baseMaps, groupedOverlays).addTo(map);
 
 L.control.zoomBox({
 	modal: true
