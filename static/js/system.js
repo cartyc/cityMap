@@ -210,7 +210,8 @@ cycling_existing = L.esri.featureLayer({
 	url: "http://maps.ottawa.ca/arcgis/rest/services/CyclingMap/MapServer/3"
 }),
 cycling_mountain = L.esri.featureLayer({
-	url: "http://maps.ottawa.ca/arcgis/rest/services/CyclingMap/MapServer/17"
+	url: "http://maps.ottawa.ca/arcgis/rest/services/CyclingMap/MapServer/17",
+	style: {"color": "orange"}
 }),
 cycling_winter = L.esri.featureLayer({
 	url: "http://maps.ottawa.ca/arcgis/rest/services/CyclingMap/MapServer/4"
