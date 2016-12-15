@@ -1,3 +1,14 @@
+// Address Type Sub
+var addressSub = {
+	"avenue": "ave",
+	"road": "rd",
+	"street": "st",
+	"drive": "dr",
+	"crescent": "cres",
+	"boulevard": "boul"
+}
+
+
 function spinSearch(){
 	search = $("#search-button")
 
@@ -23,6 +34,11 @@ function searchGeoOttawa(){
 		if( address[address.length-1] === "."){
 			address = address.slice(0, -1);
 		}
+
+		for (var i in addressSub){
+			address = address.replace(i.toUpperCase() , addressSub[i].toUpperCase())
+		}
+
 
 		//Append Table
 		// $("#results").append("<table id='rtable' class='table'><thead><tr><th>Address</th><th>Pin#</th><th>Zoning</th><th>Ward</th></tr></thead><tbody id='resultbody'></tbody></table>");
