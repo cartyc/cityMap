@@ -20,7 +20,9 @@ function searchGeoOttawa(){
 		var data = $("#pin").val(),
 		address = $("#address_name").val().toUpperCase();
 
-
+		if( address[address.length-1] === "."){
+			address = address.slice(0, -1);
+		}
 
 		//Append Table
 		// $("#results").append("<table id='rtable' class='table'><thead><tr><th>Address</th><th>Pin#</th><th>Zoning</th><th>Ward</th></tr></thead><tbody id='resultbody'></tbody></table>");
@@ -71,6 +73,8 @@ function searchGeoOttawa(){
 		}
 
 		plotResults(points);
+
+		map.invalidateSize();
 	}
 
 	//Iniate Search on submit
