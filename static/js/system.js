@@ -246,8 +246,9 @@ zoningMap = L.esri.dynamicMapLayer({
 	url: "http://maps.ottawa.ca/arcgis/rest/services/Zoning/MapServer",
 	opacity: .7
 }),
-parcelMap = L.esri.dynamicMapLayer({
-	url: "http://maps.ottawa.ca/arcgis/rest/services/Property_Parcels/MapServer/"
+parcelMap = L.esri.featureLayer({
+	url: "http://maps.ottawa.ca/arcgis/rest/services/Property_Parcels/MapServer/2",
+	minZoom: 15
 }),
 transit = L.esri.dynamicMapLayer({
 	url: "http://maps.ottawa.ca/arcgis/rest/services/TransitServices/MapServer"
@@ -322,7 +323,7 @@ wards.bindPopup(function(feature){
 	var feature = feature.feature.properties
 
 	var body = "\
-	<div class='container'>\
+	<div class='container-fluid'>\
 		<div class='row'>\
 			<div class='col-md-5'>Ward</div>\
 			<div class='col-md-7'>" +
@@ -332,7 +333,16 @@ wards.bindPopup(function(feature){
 		<div class='row'>\
 			<div class='col-md-5'>Councillor</div>\
 			<div class='col-md-7'>" +
-				feature.COUNCILLOR + "</div></div><div class='row'><div class='col-md-5'>Ward Website</div><div class='col-md-7'><a href='" + feature.LINK_EN + "' target='_blank'>Link</a></div></div></div>"
+				feature.COUNCILLOR + 
+			"</div>\
+		</div>\
+		<div class='row'>\
+			<div class='col-md-5'>Ward Website</div>\
+			<div class='col-md-7'>\
+				<a href='" + feature.LINK_EN + "' target='_blank'>Link</a>\
+			</div>\
+		</div>\
+	</div>"
 
 	return body
 })
@@ -382,6 +392,15 @@ recreation.bindPopup(function(feature){
 	return body
 })
 
+parcelMap.bindPopup(function(feature){
+	console.log(feature)
+
+	var feature = feature.feature.properties;
+
+	var body = "<div class='row'><div class='col-md-12'><h4>" + feature.ADDRESS_NUMBER + " " + feature.ROAD_NAME + feature.SUFFIX +"</h4></div></div><div class='row'><table class='table'><tr><td>Pin</td><td>" + feature.PIN +"</td></tr>\
+            </table></div>"
+	return body
+})
 
 ////////////
 // Overlays
