@@ -4,4 +4,4 @@ staticfiles
 .secret
 .env
 .DS_Store
-*.sublime-project
+*.sublime-workspace
