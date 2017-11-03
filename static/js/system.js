@@ -69,19 +69,22 @@ function searchGeoOttawa(){
 
 				var fulladdress = feature[i].address;
 				// pin = pinGeoLookUp(feature[i].x, feature[i].y)[0].attributes.PIN_NUMBER;
-				// var zoning = zoningLookUp(feature[i].x, feature[i].y),
-				// zoneCode = zoning.ZONE_CODE,
-				// zoningLink = zoning.URL,
+
 				// ward = feature[i].attributes.WARD,
-				id = feature[i].attributes.Ref_ID;
+				// id = feature[i].attributes.Ref_ID;
 
 				// Add Points to dict for mapping
 				// var point = { "coordinates" : [feature[i].x, feature[i].y], "fullAddress": fulladdress, "zoning": zoneCode, "zoneLink": zoningLink, "ward": ward };
 				if( feature[i].attributes.Loc_name == "Address"){
-					var point = { "coordinates" : [feature[i].location.x, feature[i].location.y], "fullAddress": fulladdress }
+					var zoning = zoningLookUp(feature[i].location.x, feature[i].location.y, ''),
+					zoneCode = zoning.ZONE_CODE,
+					zoningLink = zoning.URL;
+					console.log("zoning")
+					console.log(zoning)
+					var point = { "coordinates" : [feature[i].location.x, feature[i].location.y], "fullAddress": fulladdress, 'zoning': zoneCode, 'zoningLink': zoningLink }
 					points.push(point);			
 					
-					// var address = "<div class='row address' id='" + id + "'><div class='col-md-12'><div class='row'><div class='col-md-12 h4'>"+ fulladdress + "</div></div><div classs='row'><div class='col-md-4'> Zoning: " + zoneCode + "</div><div class='col-md-4'> Ward # " + ward + "</div></div></div><div class='row'><div class='col-md-12'><button class='btn btn-secondart pull-md-right' onClick='propertyModal(" + id + ")'>Detail</button></div></div></div>"
+					// var address = "<div class='row address'><div class='col-md-12'><div class='row'><div class='col-md-12 h4'>"+ fulladdress + "</div></div><div classs='row'><div class='col-md-4'> Zoning: " + zoneCode + "</div></div></div><div class='row'><div class='col-md-12'><button class='btn btn-secondart pull-md-right'>Detail</button></div></div></div>"
 
 					// $("#results").append(address)
 				}
@@ -127,8 +130,8 @@ function searchGeoOttawa(){
 			url: url,
 			type: "GET",
 			success: function(results){
-				console.log(results)
-				feature = results.candidates;
+
+				feature = results;
 				
 			},
 			error: function(err){
@@ -149,7 +152,7 @@ function searchGeoOttawa(){
 
 		var feature = query(url);
 
-		return feature
+		return feature.candidates
 	}
 
 
@@ -183,8 +186,6 @@ function searchGeoOttawa(){
 
 var zoningLookUp = function(x,y, geomtry){
 
-		console.log(x,y);
-		console.log(geomtry);
 
 		if (geomtry){
 			console.log("geom")
@@ -193,18 +194,21 @@ var zoningLookUp = function(x,y, geomtry){
 			var get = query(url);
 
 		} else {
-			var url = "http://maps.ottawa.ca/arcgis/rest/services/Zoning/MapServer/3/query?where=&text=&objectIds=&time=&geometry=" + x + "," + y +"&geometryType=esriGeometryPoint&inSR=&spatialRel=esriSpatialRelWithin&relationParam=&outFields=ZONINGTYPE%2CZONE_CODE%2CZONE_MAIN%2CPIN%2C+URL+&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=pjson"
+			var url = "http://maps.ottawa.ca/arcgis/rest/services/Zoning/MapServer/3/query?where=&text=&objectIds=&time=&geometry=" + x + ", " + y +"&geometryType=esriGeometryPoint&inSR=&spatialRel=esriSpatialRelWithin&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=pjson"
+			console.log(url)
 			var get = query(url);			
 		}
 
-
 		try{
-			var attr = get[0].attributes
+			var attr = get.features[0].attributes
 		} catch (err){
 			var  attr = ''
-		}
+		}		
+		
+		return attr	
 
-		return attr
+
+
 	}
 
 // External
@@ -222,6 +226,10 @@ googleSat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Wo
 }),
 googleRoad = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
 	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012'
+}),
+topo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+	maxZoom: 17,
+	attribution: 'Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
 });
 
 
@@ -390,16 +398,16 @@ trees.bindPopup(function(featureLayer){
 
 artsandculture.bindPopup(function(feature){
 	var feature = feature.feature.properties;
-	var body = '<div class="row"><div class="col-md-21">' + feature.BUSINESS_ENTITY_DESC + '</div></div>\
-	<div class="row"><div class="col-md-21">' + feature.BUILDING_TYPE + '</div></div>\
+	var body = '<div class="container"><div class="row"><div class="col-md-12"><h4>' + feature.BUSINESS_ENTITY_DESC + '</h4></div></div>\
+	<div class="row"><div class="col-md-12">' + feature.BUILDING_TYPE + '</div></div></div>\
 	'
 	return body
 })
 
 recreation.bindPopup(function(feature){
 	var feature = feature.feature.properties;
-	var body = '<div class="row"><div class="col-md-21">' + feature.BUSINESS_ENTITY_DESC + '</div></div>\
-	<div class="row"><div class="col-md-21">' + feature.BUILDING_TYPE + '</div></div>\
+	var body = '<div class="row"><div class="col-md-12">' + feature.BUSINESS_ENTITY_DESC + '</div></div>\
+	<div class="row"><div class="col-md-12">' + feature.BUILDING_TYPE + '</div></div>\
 	'
 	return body
 })
@@ -407,8 +415,8 @@ recreation.bindPopup(function(feature){
 developmentApps.bindPopup(function(feature){
 	var feature = feature.feature.properties;
 
-	var body = '<div class="container"><div class="row"><div class="col-md-21"><h2>' + feature.APPLICATION_TYPE_EN + '<h2></div></div>\
-	<div class="row"><div class="col-md-12"><p>' + feature.ADDRESS_NUMBER_ROAD_NAME + '</p><p>' + feature.APPLICATION_NUMBER + '</p></div></div></div>'
+	var body = '<div class="container"><div class="row"><div class="col-md-12"><h4>' + feature.APPLICATION_TYPE_EN + '<h4></div></div>\
+	<div class="row"><div class="col-md-12"><p>Address: ' + feature.ADDRESS_NUMBER_ROAD_NAME + '</br>Application # ' + feature.APPLICATION_NUMBER + '</p></div></div></div>'
 
 	return body
 })
@@ -416,7 +424,7 @@ developmentApps.bindPopup(function(feature){
 // Overlays
 
 
-var baseMaps = {"Road": road, "Google Road": googleRoad, "Google Sat": googleSat};
+var baseMaps = {"Road": road, "ESRI": googleRoad, "Satellite": googleSat, "Topographic": topo};
 
 
 var groupedOverlays = {
@@ -518,9 +526,9 @@ function plotResults(markers){
 
    		marker = L.marker(latlng);
    		 marker.bindPopup(
-            "<div class='row'><div class='col-md-12'><h4>" + markers[i]["fullAddress"] +"</h4></div></div><div class='row'><table class='table'><tr><td>Pin</td><td>" + markers[i]["pin"] +"</td></tr>\
-            <tr><td>Zoning</td><td><a href='http://www.ottawa.ca" + markers[i]["zoneLink"] +"' target='_blank'>" +markers[i]["zoning"] + "</a></td></tr>\
-            <tr><td>Ward</td><td>" + markers[i]["ward"] +"</td></tr>\
+            "<div class='row'><div class='col-md-12'><h4>" + markers[i]["fullAddress"] +"</h4></div></div><div class='row'><table class='table'><tr></tr>\
+            <tr><td>Zoning</td><td><a href='http://www.ottawa.ca/" + markers[i]["zoningLink"] +"' target='_blank'>" +markers[i]["zoning"] + "</a></td></tr>\
+            <tr></tr>\
             </table></div>", markers[i]);
 
    		points.addLayer(marker);
