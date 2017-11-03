@@ -66,23 +66,29 @@ function searchGeoOttawa(){
 			var feature = addressSearch(address)
 			for (var i = 0; i < feature.length; i++){
 
-				console.log(feature[i])
 
-				var fulladdress = feature[i].attributes.FULLADDR,
-				pin = pinGeoLookUp(feature[i].geometry.x, feature[i].geometry.y)[0].attributes.PIN_NUMBER;
-				var zoning = zoningLookUp(feature[i].geometry.x, feature[i].geometry.y),
-				zoneCode = zoning.ZONE_CODE,
-				zoningLink = zoning.URL,
-				ward = feature[i].attributes.WARD,
-				id = feature[i].attributes.OBJECTID;
+				var fulladdress = feature[i].address;
+				// pin = pinGeoLookUp(feature[i].x, feature[i].y)[0].attributes.PIN_NUMBER;
+				// var zoning = zoningLookUp(feature[i].x, feature[i].y),
+				// zoneCode = zoning.ZONE_CODE,
+				// zoningLink = zoning.URL,
+				// ward = feature[i].attributes.WARD,
+				id = feature[i].attributes.Ref_ID;
 
 				// Add Points to dict for mapping
-				var point = { "coordinates" : [feature[i].geometry.x, feature[i].geometry.y], "fullAddress": fulladdress, "pin": pin, "zoning": zoneCode, "zoneLink": zoningLink, "ward": ward };
-				points.push(point);
+				// var point = { "coordinates" : [feature[i].x, feature[i].y], "fullAddress": fulladdress, "zoning": zoneCode, "zoneLink": zoningLink, "ward": ward };
+				if( feature[i].attributes.Loc_name == "Address"){
+					var point = { "coordinates" : [feature[i].location.x, feature[i].location.y], "fullAddress": fulladdress }
+					points.push(point);			
+					
+					// var address = "<div class='row address' id='" + id + "'><div class='col-md-12'><div class='row'><div class='col-md-12 h4'>"+ fulladdress + "</div></div><div classs='row'><div class='col-md-4'> Zoning: " + zoneCode + "</div><div class='col-md-4'> Ward # " + ward + "</div></div></div><div class='row'><div class='col-md-12'><button class='btn btn-secondart pull-md-right' onClick='propertyModal(" + id + ")'>Detail</button></div></div></div>"
 
-				var address = "<div class='row address' id='" + id + "'><div class='col-md-12'><div class='row'><div class='col-md-12 h4'>"+ fulladdress + "</div></div><div classs='row'><div class='col-md-4'> Zoning: " + zoneCode + "</div><div class='col-md-4'> Ward # " + ward + "</div></div></div><div class='row'><div class='col-md-12'><button class='btn btn-secondart pull-md-right' onClick='propertyModal(" + id + ")'>Detail</button></div></div></div>"
+					// $("#results").append(address)
+				}
 
-				$("#results").append(address)			
+
+
+			
 				// $("#resultbody").append("<tr><td>" + fulladdress + "</td><td>" + pin + "</td><td><a href='http://www.ottawa.ca" + zoningLink +"' target='_blank'>"+ zoneCode + "</a></td><td>" + ward + "</td></tr>")
 			}
 
@@ -121,7 +127,8 @@ function searchGeoOttawa(){
 			url: url,
 			type: "GET",
 			success: function(results){
-				feature = results.features;
+				console.log(results)
+				feature = results.candidates;
 				
 			},
 			error: function(err){
@@ -138,7 +145,7 @@ function searchGeoOttawa(){
 
 	// address search
 	var addressSearch = function(address){
-		var url = "http://maps.ottawa.ca/arcgis/rest/services/Property_Parcels/MapServer/0/query?where=FULLADDR+Like%27%25" + address + "%25%27&text=&objectIds=&time=&geometry=&geometryType=esriGeometryPoint&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=FULLADDR%2C+POINTTYPE%2C+WARD%2C+OBJECTID&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=pjson"
+		var url = "http://maps.ottawa.ca/arcgis/rest/services/compositeLocator/GeocodeServer/findAddressCandidates?SingleKey=" + address + "&State=&ZIP=&SingleLine=&category=&outFields=*&maxLocations=&outSR=&searchExtent=&location=&distance=&magicKey=&f=pjson"
 
 		var feature = query(url);
 
@@ -245,10 +252,6 @@ waterSewer = L.esri.dynamicMapLayer({
 zoningMap = L.esri.dynamicMapLayer({
 	url: "http://maps.ottawa.ca/arcgis/rest/services/Zoning/MapServer",
 	opacity: .7
-}),
-parcelMap = L.esri.featureLayer({
-	url: "http://maps.ottawa.ca/arcgis/rest/services/Property_Parcels/MapServer/2",
-	minZoom: 15
 }),
 transit = L.esri.dynamicMapLayer({
 	url: "http://maps.ottawa.ca/arcgis/rest/services/TransitServices/MapServer"
@@ -392,15 +395,6 @@ recreation.bindPopup(function(feature){
 	return body
 })
 
-parcelMap.bindPopup(function(feature){
-	console.log(feature)
-
-	var feature = feature.feature.properties;
-
-	var body = "<div class='row'><div class='col-md-12'><h4>" + feature.ADDRESS_NUMBER + " " + feature.ROAD_NAME + feature.SUFFIX +"</h4></div></div><div class='row'><table class='table'><tr><td>Pin</td><td>" + feature.PIN +"</td></tr>\
-            </table></div>"
-	return body
-})
 
 ////////////
 // Overlays
@@ -412,7 +406,6 @@ var baseMaps = {"Road": road, "Google Road": googleRoad, "Google Sat": googleSat
 var groupedOverlays = {
 	"Property": {
 		"Streets": roads, 
-		"Parcels": parcelMap, 	
  		"Zoning": zoningMap,
 		'Wards': wards,  		
  		"Neighbourhoods": neighbourhoods
@@ -493,7 +486,6 @@ function plotResults(markers){
 	}
 
 
-    
     points = L.featureGroup().addTo(map);
 
 		for( var i = 0; i < markers.length; i++){
@@ -518,7 +510,7 @@ function plotResults(markers){
 
 		}	
 
-		halfMap();
+		// halfMap();
 
 		map.fitBounds(points.getBounds());
     }
@@ -588,4 +580,4 @@ L.Control.contract = function(options){
 	return new L.Control.Contract(options);
 }
 
-L.Control.contract().addTo(map);
+// L.Control.contract().addTo(map);

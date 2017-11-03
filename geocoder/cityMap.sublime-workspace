@@ -1,0 +1,1024 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"on",
+				"onload"
+			],
+			[
+				"property-",
+				"property-photo-upload"
+			],
+			[
+				"getElem",
+				"getElementById"
+			],
+			[
+				"bacgr",
+				"background-color"
+			],
+			[
+				"property",
+				"property-photo"
+			],
+			[
+				"previw",
+				"previewElement"
+			],
+			[
+				"phto",
+				"property_photo"
+			],
+			[
+				"rooms",
+				"rooms_bachelor_bedroom"
+			],
+			[
+				"rooms_",
+				"rooms_four_bedroom"
+			],
+			[
+				"ro",
+				"rooms_three_bedroom"
+			],
+			[
+				"K",
+				"KeyError\tclass"
+			],
+			[
+				"room",
+				"roomTotal"
+			],
+			[
+				"def",
+				"default"
+			],
+			[
+				"get",
+				"Get"
+			],
+			[
+				"regi",
+				"registeredDate"
+			],
+			[
+				"buidi",
+				"building_type"
+			],
+			[
+				"proper",
+				"property_type"
+			],
+			[
+				"list_",
+				"list_price"
+			],
+			[
+				"busin",
+				"business_address"
+			],
+			[
+				"tran",
+				"transferees"
+			],
+			[
+				"validat",
+				"validated_data\tparam"
+			],
+			[
+				"vli",
+				"validated_data\tparam"
+			],
+			[
+				"valida",
+				"validated_data\tparam"
+			],
+			[
+				"border",
+				"borderColor"
+			],
+			[
+				"cityStat",
+				"cityStatsUrl"
+			],
+			[
+				"verbose_",
+				"verbose_name_plural"
+			],
+			[
+				"attach",
+				"attachments"
+			],
+			[
+				"pre",
+				"preventDefault"
+			],
+			[
+				"edit-",
+				"edit-body"
+			],
+			[
+				"atta",
+				"attachments"
+			],
+			[
+				"margin",
+				"margin-top"
+			],
+			[
+				"valid",
+				"validated_data\tparam"
+			],
+			[
+				"text-att",
+				"text-attachment-form"
+			],
+			[
+				"fil",
+				"filterColumns"
+			],
+			[
+				"toLocate",
+				"toLocaleDateString"
+			],
+			[
+				"custom-file",
+				"custom-file-input"
+			],
+			[
+				"appr",
+				"apprImage"
+			],
+			[
+				"id_",
+				"id_property_photo"
+			],
+			[
+				"font",
+				"font-size"
+			],
+			[
+				"over",
+				"overflow-y"
+			],
+			[
+				"inline",
+				"inline-block"
+			],
+			[
+				"searh",
+				"searchForm"
+			],
+			[
+				"inlin",
+				"inline-block"
+			],
+			[
+				"p",
+				"parking_types\tstatement"
+			],
+			[
+				"For",
+				"ForeignKey"
+			],
+			[
+				"averag",
+				"average_days_on_market"
+			],
+			[
+				"avera",
+				"average_consideration\tstatement"
+			],
+			[
+				"url",
+				"urlpatterns\tstatement"
+			],
+			[
+				"propert",
+				"property_property_type\tstatement"
+			],
+			[
+				"Text",
+				"TextInput"
+			],
+			[
+				"ward",
+				"wardChart"
+			],
+			[
+				"from",
+				"form-control"
+			],
+			[
+				"master_",
+				"master_sale\tstatement"
+			],
+			[
+				"last",
+				"last_transfer\tstatement"
+			],
+			[
+				"sub",
+				"subject_neighbourhood"
+			],
+			[
+				"co",
+				"coordinates"
+			],
+			[
+				"comp",
+				"comparable_sales"
+			],
+			[
+				"subj",
+				"subjCoords"
+			],
+			[
+				"compara",
+				"comparable_sales"
+			],
+			[
+				"getComp",
+				"getComparableSales"
+			],
+			[
+				"direc",
+				"direct_comparision"
+			],
+			[
+				"backgroun",
+				"background-color"
+			],
+			[
+				"get_",
+				"get_context_data"
+			],
+			[
+				"pos",
+				"position"
+			],
+			[
+				"b",
+				"background"
+			],
+			[
+				"type",
+				"typeAheadSearch"
+			],
+			[
+				"bread",
+				"breadcrumb-item"
+			],
+			[
+				"ST",
+				"STATICFILES_DIRS\tstatement"
+			],
+			[
+				"render",
+				"renderComparableRent"
+			],
+			[
+				"getApp",
+				"getAppraisalSubjectSale"
+			],
+			[
+				"backg",
+				"background-color"
+			],
+			[
+				"filt",
+				"FilterSet"
+			],
+			[
+				"django",
+				"django_filters\tmodule"
+			],
+			[
+				"getCompar",
+				"getComparableRent"
+			],
+			[
+				"getCom",
+				"getComparableIncome"
+			],
+			[
+				"Filter",
+				"FilterSet"
+			],
+			[
+				"vacan",
+				"vacancy_rate"
+			],
+			[
+				"respon",
+				"responseText"
+			],
+			[
+				"Expe",
+				"ExpenseStatement\tclass"
+			],
+			[
+				"RentalStat",
+				"RentalStatementAdmin\tclass"
+			],
+			[
+				"backgrou",
+				"background-color"
+			],
+			[
+				"main",
+				"maintenencPercent"
+			],
+			[
+				"aja",
+				"ajaxLoad"
+			],
+			[
+				"back",
+				"background-color"
+			],
+			[
+				"app",
+				"appraisalId"
+			],
+			[
+				"master",
+				"master_appraisal"
+			],
+			[
+				"final",
+				"final_value"
+			],
+			[
+				"ad",
+				"advanced_search"
+			],
+			[
+				"NU",
+				"NumberFilter"
+			],
+			[
+				"N",
+				"NumberFilter"
+			],
+			[
+				"djan",
+				"django_filters\tmodule"
+			],
+			[
+				"Buildin",
+				"BuildingPermitsFilter\tclass"
+			],
+			[
+				"backgorund-",
+				"background-position"
+			],
+			[
+				"c",
+				"contain"
+			],
+			[
+				"no",
+				"no-repeat"
+			],
+			[
+				"text",
+				"text-align"
+			],
+			[
+				"backgr",
+				"background-image"
+			],
+			[
+				"sales",
+				"sales_property"
+			],
+			[
+				"load",
+				"ajaxLoad"
+			],
+			[
+				"pagin",
+				"pagination_class"
+			],
+			[
+				"Parcel",
+				"ParcelBase"
+			],
+			[
+				"order",
+				"order_by"
+			],
+			[
+				"con",
+				"console"
+			],
+			[
+				"AppraisalApr",
+				"AppraisalParcelCreateFormInline\tstatement"
+			],
+			[
+				"zon",
+				"zoning_main_code"
+			],
+			[
+				"repson",
+				"responseText"
+			],
+			[
+				"create",
+				"createAppraisalParcel"
+			],
+			[
+				"appraisalp",
+				"appraisalparcel"
+			],
+			[
+				"err",
+				"error"
+			],
+			[
+				"appra",
+				"appraisalproperty-id"
+			],
+			[
+				"appraisalprop",
+				"appraisalproperty-id"
+			],
+			[
+				"select",
+				"selectAddress"
+			],
+			[
+				"di",
+				"display"
+			],
+			[
+				"Appraisalst",
+				"AppraisalStaffSerializer\tclass"
+			],
+			[
+				"BuildingPer",
+				"BuildingPermitsPagination"
+			],
+			[
+				"filter",
+				"filter_backends"
+			],
+			[
+				"List",
+				"ListCreateAPIView"
+			],
+			[
+				"conte",
+				"content-area-clear"
+			],
+			[
+				"content-area",
+				"content-area-clear"
+			],
+			[
+				"Ret",
+				"RetrieveUpdateDestroyAPIView"
+			],
+			[
+				"Geo",
+				"GeoFilterSet\timport"
+			],
+			[
+				"leaflet",
+				"leafletTest\tclass"
+			],
+			[
+				"uniq",
+				"unique_together"
+			],
+			[
+				"ch",
+				"CharField"
+			],
+			[
+				"Char",
+				"CharField"
+			],
+			[
+				"Cens",
+				"CensusTractAPI\tclass"
+			],
+			[
+				"Census",
+				"CensusTract\tclass"
+			],
+			[
+				"ge",
+				"getDivisions"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "settings.py",
+			"settings":
+			{
+				"buffer_size": 4259,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 123.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"in",
+				"Package Control: Install Package"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"git cha",
+				"Git: Change Branch"
+			],
+			[
+				"git branch",
+				"Git: Change Branch"
+			],
+			[
+				"git push",
+				"Git: Push"
+			],
+			[
+				"git merge",
+				"Git: Merge Branch"
+			],
+			[
+				"git ",
+				"Git: Gitk"
+			],
+			[
+				"git ch",
+				"Git: Change Branch"
+			],
+			[
+				"git comm",
+				"Git: Commit"
+			],
+			[
+				"git add",
+				"Git: Add Current File"
+			],
+			[
+				"git bran",
+				"Git: Change Branch"
+			],
+			[
+				"git b",
+				"Git: Change Branch"
+			],
+			[
+				"gitcom",
+				"Git: Commit"
+			],
+			[
+				"git add ",
+				"Git: Add Current File"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"git com",
+				"Git: Commit"
+			],
+			[
+				"git bra",
+				"Git: Change Branch"
+			],
+			[
+				"git",
+				"Git: Commit"
+			],
+			[
+				"git c",
+				"Git: Commit"
+			],
+			[
+				"git:a",
+				"Git: Add Current File"
+			],
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"GIT: BRANC",
+				"Git: Change Branch"
+			],
+			[
+				"pack",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 371.0
+	},
+	"console":
+	{
+		"height": 120.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = 'df21e130d211cfc94d9b0905775a7c0f' + '1e3d39e33b79698005270310898eea76'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)",
+			"view.encoding()"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/Users/work/Documents/django_projects/cityMap"
+	],
+	"file_history":
+	[
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/sales/models.py",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/static/js/sales.js",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/templates/sales/edit.html",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/config/wsgi.py",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/templates/sales/sales-form.html",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/static/css/main.css",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/sales/forms.py",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/static/css/sales.css",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/apiv1/serializers.py",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/config/settings/prod.py",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/templates/sales/view.html",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/config/settings/local.py",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/config/settings/base.py",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/nginx/sites-enabled/django_project",
+		"/Users/work/Documents/django_projects/property_sales/propertySales/property_sales/settings.py",
+		"/Users/work/Documents/django_projects/property_sales/propertySales/static/css/public.css",
+		"/Users/work/Documents/django_projects/property_sales/propertySales/static/css/main.css",
+		"/Users/work/Documents/django_projects/property_sales/propertySales/templates/base.html",
+		"/Users/work/Documents/django_projects/property_sales/propertySales/templates/sales/home.html",
+		"/Users/work/Documents/django_projects/property_sales/docker-compose.yml",
+		"/Users/work/Documents/django_projects/property_sales/Dockerfile",
+		"/Users/work/Documents/django_projects/property_sales/apache2.conf",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/static/js/citysearch.js",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/static/js/appraisals.js",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/static/js/mapping.js",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/templates/sales/create.html",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/appraisals/migrations/0237_auto_20170914_0021.py",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/docker-compose-nginx.yml",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/templates/users/dashboard_v2.html",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/templates/loggedinBase.html",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/filemaker/test.html",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/Dockerfile",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/docker-compose.yml",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/templates/property/report.html",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/generalstatistics/management/commands/loadStats.py",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/resources/nhs2011Income.csv",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/templates/sales/list.html",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/templates/sales/search.html",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/.gitlab-ci.yml",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/nginx/Dockerfile",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/sites-enabled/django_project",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/requirements.txt",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/install.sh",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/config/settings/staging.py",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/generalstatistics/support.py",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/manage.py",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/config/mydjango.conf",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/000-default.conf",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/resources/2011censusdata.csv",
+		"/Users/work/Documents/django_projects/property_sales/apache.conf",
+		"/Users/work/Documents/django_projects/property_sales/propertySales/property_sales/wsgi.py",
+		"/Users/work/Documents/django_projects/property_sales/propertySales/manage.py",
+		"/Users/work/Documents/django_projects/property_sales/propertySales/property_sales/local.py",
+		"/Users/work/Documents/django_projects/property_sales/requirements.txt",
+		"/Users/work/Documents/000-default.conf",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/sales/migrations/0187_auto_20170714_1626.py",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/appraisals/migrations/0236_auto_20170913_1539.py",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/Dockerfile_prod",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/appraisals/helpers.py",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/static/js/general.js",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/templates/appraisals/attachments.html",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/templates/appraisals/document.html",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/apiv1/views.py",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/static/js/attachments.js",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/static/js/clauses.js",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/generalstatistics/models.py",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/generalstatistics/admin.py",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/static/js/charts.js",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/appraisals/migrations/0235_auto_20170829_1551.py",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/resources/2016_census.csv",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/appraisals/forms.py",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/appraisals/admin.py",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/templates/appraisals/print.html",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/appraisals/models.py",
+		"/Users/work/Downloads/98-401-X2016003_eng_CSV/98-401-X2016003_English_CSV_data.csv",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/appraisals/views.py",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/static/js/attache\\ments.js",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/appraisals/migrations/0234_auto_20170801_1550.py",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/static/css/appraisal_print.css",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/appraisals/migrations/0233_auto_20170725_1611.py",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/appraisals/migrations/0232_auto_20170714_1626.py",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/templates/appraisals/add_comp.html",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/sales/urls.py",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/sales/views.py",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/templates/sales/salesPrint.html",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/apiv1/urls.py",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/templates/sales/commercialPrint.html",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/templates/appraisals/detail.html",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/templates/sales/listPrint.html",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/sales/admin.py",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/sales/migrations/0185_auto_20170714_1552.py",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/templates/property/report_print.html",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/static/css/sales-print.css",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/appraiserpro_project/appraiserprov2/appraisals/urls.py",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/cg_web/website/wp-content/themes/carty-gwilym/hero.php",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/cg_web/website/wp-content/themes/carty-gwilym/cg-template-parts/full-page-home.php",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/cg_web/website/wp-content/themes/carty-gwilym/cg-includes/post-types.php",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/cg_web/website/wp-content/themes/carty-gwilym/cg-includes/shortcodes.php",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/cg_web/website/wp-content/themes/carty-gwilym/js/cg.js",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/cg_web/website/wp-content/themes/carty-gwilym/cg-includes/widgets.php",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/cg_web/website/wp-content/themes/carty-gwilym/parts/header-banner.php",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/cg_web/website/wp-content/themes/carty-gwilym/single.php",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/cg_web/website/wp-includes/widgets.php",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/cg_web/website/wp-content/themes/carty-gwilym/cg-template-parts/full-page-archive.php",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/cg_web/website/wp-content/plugins/wp-notes-widget-0.1.0/wp-notes-widget.php",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/cg_web/website/wp-content/plugins/wp-notes-widget-0.1.0/includes/class-wp-notes-activator.php",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/cg_web/website/wp-content/themes/carty-gwilym/page-full.php",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/cg_web/website/wp-content/themes/carty-gwilym/front-page.php",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/cg_web/website/wp-content/themes/carty-gwilym/js/app.js",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/cg_web/website/wp-content/themes/carty-gwilym/index.php",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/cg_web/website/wp-content/themes/carty-gwilym/header.php",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/cg_web/website/wp-config.php",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/cg_web/website/wp-includes/class-wp-customize-section.php",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/cg_web/website/wp-admin/index.php",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/cg_web/website/wp-blog-header.php",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/cg_web/website/wp-content/themes/carty-gwilym/content.php",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/cg_web/website/wp-content/themes/carty-gwilym/content-none.php",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/cg_web/website/wp-content/themes/carty-gwilym/cg-includes/init.php",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/cg_web/website/wp-content/themes/carty-gwilym/functions.php",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/cg_web/website/wp-content/themes/carty-gwilym/kitchen-sink.php",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/cg_web/website/wp-content/themes/carty-gwilym/page.php",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/cg_web/website/wp-content/themes/carty-gwilym/searchform.php",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/cg_web/website/wp-content/themes/carty-gwilym/sidebar-left.php",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/cg_web/website/wp-content/themes/carty-gwilym/style.css",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/cg_web/website/wp-content/themes/carty-gwilym/custom-page-home.php",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/cg_web/website/wp-content/themes/carty-gwilym/page-sidebar-left.php",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/cg_web/website/wp-content/themes/carty-gwilym/archive.php",
+		"/Users/work/Documents/Carty_Computers/cartyGwilym/cg_web/website/wp-content/themes/carty-gwilym/woocommerce.php"
+	],
+	"find":
+	{
+		"height": 27.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "settings.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4259,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"bracket_highlighter.busy": false,
+							"bracket_highlighter.locations":
+							{
+								"close":
+								{
+								},
+								"icon":
+								{
+								},
+								"open":
+								{
+								},
+								"unmatched":
+								{
+								}
+							},
+							"bracket_highlighter.regions":
+							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content"
+							],
+							"git_gutter_is_enabled": true,
+							"syntax": "Packages/Djaneiro/Syntaxes/Python Django.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 19.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 27.0
+	},
+	"input":
+	{
+		"height": 65.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.autopep8":
+	{
+		"height": 82.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.git":
+	{
+		"height": 120.0
+	},
+	"pinned_build_system": "",
+	"project": "cityMap.sublime-project",
+	"replace":
+	{
+		"height": 50.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": false,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 220.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
