@@ -145,7 +145,7 @@ function searchGeoOttawa(){
 
 	// address search
 	var addressSearch = function(address){
-		var url = "http://maps.ottawa.ca/arcgis/rest/services/compositeLocator/GeocodeServer/findAddressCandidates?SingleKey=" + address + "&State=&ZIP=&SingleLine=&category=&outFields=*&maxLocations=&outSR=&searchExtent=&location=&distance=&magicKey=&f=pjson"
+		var url = "https://maps.ottawa.ca/arcgis/rest/services/compositeLocator/GeocodeServer/findAddressCandidates?SingleKey=" + address + "&State=&ZIP=&SingleLine=&category=&outFields=*&maxLocations=&outSR=&searchExtent=&location=&distance=&magicKey=&f=pjson"
 
 		var feature = query(url);
 
@@ -213,17 +213,15 @@ var zoningLookUp = function(x,y, geomtry){
 //////////////
 // Base Maps
 
-var road = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png',{
-  maxZoom: 19,
-  attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+var road = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+	maxZoom: 19,
+	attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }),
-googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s,m&x={x}&y={y}&z={z}',{
-    maxZoom: 21,
-    subdomains:['mt0','mt1','mt2','mt3']
+googleSat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
 }),
-googleRoad = L.tileLayer('http://{s}.google.com/vt/lyrs=r,m&x={x}&y={y}&z={z}',{
-    maxZoom: 20,
-    subdomains:['mt0','mt1','mt2','mt3']
+googleRoad = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012'
 });
 
 
@@ -316,9 +314,20 @@ recreation = L.esri.featureLayer({
 			})
 		})
 	}
-});
-
-
+}),
+developmentApps = L.esri.featureLayer({
+	url: "https://maps.ottawa.ca/arcgis/rest/services/Development_Applications/MapServer/0",
+	pointToLayer: function(geoJson, latlng){
+	return L.marker(latlng, {
+		icon: L.AwesomeMarkers.icon({
+			icon: 'bullhorn',
+			prefix: 'fa',
+			markerColor: 'purple',
+			iconColor: "#fff"
+		})
+	})
+	}
+})
 /////////////////////////////////////
 // PopUps
 
@@ -395,7 +404,14 @@ recreation.bindPopup(function(feature){
 	return body
 })
 
+developmentApps.bindPopup(function(feature){
+	var feature = feature.feature.properties;
 
+	var body = '<div class="container"><div class="row"><div class="col-md-21"><h2>' + feature.APPLICATION_TYPE_EN + '<h2></div></div>\
+	<div class="row"><div class="col-md-12"><p>' + feature.ADDRESS_NUMBER_ROAD_NAME + '</p><p>' + feature.APPLICATION_NUMBER + '</p></div></div></div>'
+
+	return body
+})
 ////////////
 // Overlays
 
@@ -425,6 +441,7 @@ var groupedOverlays = {
 		"Transit": transit,
  		'Sewer and Water': waterSewer, 
 		"Trees": trees,
+		"Development_Applications": developmentApps
 	}
 }
 
@@ -531,53 +548,53 @@ var fullMap = function(){
 }
 
 
-L.Control.Contract = L.Control.extend({
-	_active: false,
-	options: {
-		position: "topleft",
-		modal: true,
-		className: 'leaflet-expand-icon collapse',
-		title: "shrink map"
-	},
-	onAdd: function(map){
-		// console.log(map)
-		this._map = map;
-		this._container = L.DomUtil.create('div', 'leaflet-zoom-box-control leaflet-bar');
-		this._container.title = this.options.title;
+// L.Control.Contract = L.Control.extend({
+// 	_active: false,
+// 	options: {
+// 		position: "topleft",
+// 		modal: true,
+// 		className: 'leaflet-expand-icon collapse',
+// 		title: "shrink map"
+// 	},
+// 	onAdd: function(map){
+// 		// console.log(map)
+// 		this._map = map;
+// 		this._container = L.DomUtil.create('div', 'leaflet-zoom-box-control leaflet-bar');
+// 		this._container.title = this.options.title;
 
-		var link = L.DomUtil.create('a', this.options.className, this._container);
-		link.href="#";
+// 		var link = L.DomUtil.create('a', this.options.className, this._container);
+// 		link.href="#";
 
-		L.DomEvent
-			.on(this._container, 'click', function(){
+// 		L.DomEvent
+// 			.on(this._container, 'click', function(){
 
-					if (this._active){
-						this._active = false;
-						fullMap();
-						// L.DomUtil.removeClass(this._container, 'expand')
-						// L.DomUtil.addClass(this._container, 'collapse')
-						map.invalidateSize();
-					} else{
-						halfMap();
-						this._active = true;
-						L.DomUtil.removeClass(this._container, 'collapse')
-						L.DomUtil.addClass(this._container, 'expand')
-						map.invalidateSize();
-					}
-				}, this);
+// 					if (this._active){
+// 						this._active = false;
+// 						fullMap();
+// 						// L.DomUtil.removeClass(this._container, 'expand')
+// 						// L.DomUtil.addClass(this._container, 'collapse')
+// 						map.invalidateSize();
+// 					} else{
+// 						halfMap();
+// 						this._active = true;
+// 						L.DomUtil.removeClass(this._container, 'collapse')
+// 						L.DomUtil.addClass(this._container, 'expand')
+// 						map.invalidateSize();
+// 					}
+// 				}, this);
 
-		return this._container;
-	},
-	activate: function(){
-		this._active = false
-		L.DomUtil.removeClass(this._container, 'expand')
-		L.DomUtil.addClass(this._container, 'collapse')
-		map.invalidateSize();
-	}
-})
+// 		return this._container;
+// 	},
+// 	activate: function(){
+// 		this._active = false
+// 		L.DomUtil.removeClass(this._container, 'expand')
+// 		L.DomUtil.addClass(this._container, 'collapse')
+// 		map.invalidateSize();
+// 	}
+// })
 
-L.Control.contract = function(options){
-	return new L.Control.Contract(options);
-}
+// L.Control.contract = function(options){
+// 	return new L.Control.Contract(options);
+// }
 
 // L.Control.contract().addTo(map);
