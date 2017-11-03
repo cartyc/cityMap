@@ -231,33 +231,33 @@ googleRoad = L.tileLayer('http://{s}.google.com/vt/lyrs=r,m&x={x}&y={y}&z={z}',{
 // Layers
 
 var roads = L.esri.dynamicMapLayer({
-	url: "http://maps.ottawa.ca/arcgis/rest/services/Streets/MapServer/"
+	url: "https://maps.ottawa.ca/arcgis/rest/services/Streets/MapServer/"
 }),
 cycling_existing = L.esri.featureLayer({
-	url: "http://maps.ottawa.ca/arcgis/rest/services/CyclingMap/MapServer/3"
+	url: "https://maps.ottawa.ca/arcgis/rest/services/CyclingMap/MapServer/3"
 }),
 cycling_mountain = L.esri.featureLayer({
-	url: "http://maps.ottawa.ca/arcgis/rest/services/CyclingMap/MapServer/17",
+	url: "https://maps.ottawa.ca/arcgis/rest/services/CyclingMap/MapServer/17",
 	style: {"color": "orange"}
 }),
 cycling_winter = L.esri.featureLayer({
-	url: "http://maps.ottawa.ca/arcgis/rest/services/CyclingMap/MapServer/4"
+	url: "https://maps.ottawa.ca/arcgis/rest/services/CyclingMap/MapServer/4"
 }),
 wards = L.esri.featureLayer({
-	url: "http://maps.ottawa.ca/arcgis/rest/services/Wards/MapServer/0"
+	url: "https://maps.ottawa.ca/arcgis/rest/services/Wards/MapServer/0"
 }),
 waterSewer = L.esri.dynamicMapLayer({
-	url: "http://maps.ottawa.ca/arcgis/rest/services/WaterAndSewer/MapServer"
+	url: "https://maps.ottawa.ca/arcgis/rest/services/WaterAndSewer/MapServer"
 }),
 zoningMap = L.esri.dynamicMapLayer({
-	url: "http://maps.ottawa.ca/arcgis/rest/services/Zoning/MapServer",
+	url: "https://maps.ottawa.ca/arcgis/rest/services/Zoning/MapServer",
 	opacity: .7
 }),
 transit = L.esri.dynamicMapLayer({
-	url: "http://maps.ottawa.ca/arcgis/rest/services/TransitServices/MapServer"
+	url: "https://maps.ottawa.ca/arcgis/rest/services/TransitServices/MapServer"
 }),
 trees = L.esri.featureLayer({
-	url: "http://maps.ottawa.ca/arcgis/rest/services/Miscellaneous/MapServer/1",
+	url: "https://maps.ottawa.ca/arcgis/rest/services/Miscellaneous/MapServer/1",
 	pointToLayer: function(geoJson, latlng) {
 		var diameter = geoJson.properties.DBH / 100;
 		return L.circle(latlng, {radius: diameter * 5, color: "#68B684"})
@@ -265,10 +265,10 @@ trees = L.esri.featureLayer({
 	
 }),
 neighbourhoods = L.esri.featureLayer({
-	url: "http://maps.ottawa.ca/arcgis/rest/services/Neighbourhoods/MapServer/1"
+	url: "https://maps.ottawa.ca/arcgis/rest/services/Neighbourhoods/MapServer/1"
 }),
 hospitals = L.esri.featureLayer({
-	url: "http://maps.ottawa.ca/arcgis/rest/services/Hospitals/MapServer/0",
+	url: "https://maps.ottawa.ca/arcgis/rest/services/Hospitals/MapServer/0",
 	pointToLayer: function(geoJson, latlng){
 		return L.marker(latlng, {
 			icon: L.AwesomeMarkers.icon({
@@ -280,7 +280,7 @@ hospitals = L.esri.featureLayer({
 	}).addTo(map)}
 }),
 schools = L.esri.featureLayer({
-	url: "http://maps.ottawa.ca/arcgis/rest/services/Schools/MapServer/1",
+	url: "https://maps.ottawa.ca/arcgis/rest/services/Schools/MapServer/1",
 	pointToLayer: function(geoJson, latlng){
 		return L.marker(latlng, {
 			icon: L.AwesomeMarkers.icon({
@@ -292,7 +292,7 @@ schools = L.esri.featureLayer({
 	}).addTo(map)}
 }),
 artsandculture = L.esri.featureLayer({
-	url: "http://maps.ottawa.ca/arcgis/rest/services/City_Facilities/MapServer/0",
+	url: "https://maps.ottawa.ca/arcgis/rest/services/City_Facilities/MapServer/0",
 	pointToLayer: function(geoJson, latlng){
 		return L.marker(latlng, {
 			icon: L.AwesomeMarkers.icon({
@@ -305,7 +305,7 @@ artsandculture = L.esri.featureLayer({
 	}
 }),
 recreation = L.esri.featureLayer({
-	url: "http://maps.ottawa.ca/arcgis/rest/services/City_Facilities/MapServer/5",
+	url: "https://maps.ottawa.ca/arcgis/rest/services/City_Facilities/MapServer/5",
 	pointToLayer: function(geoJson, latlng){
 		return L.marker(latlng, {
 			icon: L.AwesomeMarkers.icon({
