@@ -335,6 +335,9 @@ developmentApps = L.esri.featureLayer({
 		})
 	})
 	}
+}),
+censusTracts = L.esri.featureLayer({
+	url: "http://maps.ottawa.ca/arcgis/rest/services/AdministrativeAreas/MapServer/4"
 })
 /////////////////////////////////////
 // PopUps
@@ -420,6 +423,205 @@ developmentApps.bindPopup(function(feature){
 
 	return body
 })
+
+// censusTracts.on("click", function(e){
+// 	console.log(e);
+// })
+
+censusTracts.bindPopup(function(feature){
+
+	var feature = feature.feature.properties;
+
+	var body;
+
+	body = "<div id='popup'>hi</div>"
+
+	// makeChart(feature.CTUID, feature.CTNAME)
+
+	return body
+}, {minWidth: 400, maxHeight: 500})
+
+censusTracts.on('click', function(e){
+
+	var feature = e.layer.feature.properties
+	var element = document.getElementsByClassName("leaflet-popup-content")[0];
+	console.log(element)
+
+	var test = document.createElement("canvas")
+	var node = document.createTextNode("text")
+	test.id = "chart"
+	test.width = "100"
+	test.height= "50"
+
+	test.appendChild(node)
+
+	element.appendChild(test)
+
+	console.log(feature)
+
+	makeChart(feature.CTUID, feature.CTNAME)
+
+})
+
+var makeChart = function(geo_code, ctname){
+
+	var stats,
+	filterColumns = [
+        "0 to 4 years", 
+        "5 to 9 years",
+        "10 to 14 years",
+        "15 to 19 years",
+        "20 to 24 years",
+        "25 to 29 years",
+        "30 to 34 years",
+        "35 to 39 years",
+        "40 to 44 years",
+        "45 to 49 years",
+        "50 to 54 years",
+        "55 to 59 years",
+        "60 to 64 years",
+        "65 to 69 years",
+        "70 to 74 years",
+        "75 to 79 years",
+        "80 to 84 years",
+        "85 years and over",
+        ]	
+
+	var element = document.getElementsByClassName("leaflet-popup-content")[0];
+	element.width = "300px"
+	element.height = "200px"
+	console.log(element)
+
+	var test = document.createElement("p")
+	var node = document.createTextNode("text")
+	test.id = 'chart'
+
+	test.appendChild(node)
+
+	element.appendChild(test)
+
+	console.log(test)
+
+	var ctx = document.getElementById('chart'),
+	// var ctx = document.getElementsByClassName("leaflet-popup-content")[0],
+	topic = 'Age characteristics'
+
+    var url = "http://localhost/api/census-by-tract/?geo_code=" + geo_code + "&topic=" + topic,
+    chart,
+    cChart;
+
+    console.log(url);
+
+      // Get Ward
+    $.ajax({
+      url: url,
+      type: 'get',
+      success: function(data){
+        chart = data
+      },
+      error: function(err){
+        console.error(err)
+      },
+      async: false
+    })    
+
+
+    var cleaned = [];
+
+    // Put all the data in a format for the chart to easily digest
+    for (var i = 0 ; i < chart.length; i++){
+      var check = filterColumns.indexOf(chart[i].characteristic);
+
+
+      if (check >= 0){
+        cleaned.push(chart[i].total);        
+      }
+    }
+
+    // If filter columns is empty grab all topic columns
+    if (!filterColumns){
+      filterColumns = [];
+
+      for (var i = 0; i < chart.length; i++){
+
+        var characteristic = chart[i].characteristic,
+        total = characteristic.includes("Total"),
+        percent = characteristic.includes("%"),
+        median = characteristic.includes("Median");
+
+        if( total == false && percent == false && median == false){
+          filterColumns.push(chart[i].characteristic)
+          cleaned.push(chart[i].total)
+        }
+      }
+    }
+
+
+    if (cChart){
+
+      cChart.data.labels = filterColumns;
+      cChart.data.datasets[0].data = cleaned;
+      cChart.data.datasets.splice(1,1)
+      cChart.update();
+    } else{
+
+      try{
+        cChart = new Chart(ctx, {
+                type: "line",
+                fill: false,
+                data: {
+                  labels: filterColumns,
+                  datasets: [{
+                    label: "total",
+                    fill: false,
+                    backgroundColor: "#B75D69",
+                    borderWidth: 3,
+                    borderColor: "#D72638",
+                    data: cleaned,
+                  }]
+                },
+                options: {
+                  legend: {
+                    display: false
+                  },
+                  scales: {
+                    yAxes:[{
+                      ticks: {
+                        beginAtZero: true
+                      },
+                    }]
+                  },
+                   // Container for pan options
+            pan: {
+                // Boolean to enable panning
+                enabled: true,
+
+                // Panning directions. Remove the appropriate direction to disable 
+                // Eg. 'y' would only allow panning in the y direction
+                mode: 'xy'
+            },
+
+            // Container for zoom options
+            zoom: {
+                // Boolean to enable zooming
+                enabled: true,
+
+                // Zooming directions. Remove the appropriate direction to disable 
+                // Eg. 'y' would only allow zooming in the y direction
+                mode: 'x',
+            }
+                }
+              })  
+      } catch (e){
+        console.error(e)
+      }
+            
+    }
+
+
+
+}
+
 ////////////
 // Overlays
 
@@ -449,13 +651,16 @@ var groupedOverlays = {
 		"Transit": transit,
  		'Sewer and Water': waterSewer, 
 		"Trees": trees,
-		"Development_Applications": developmentApps
+		"Development_Applications": developmentApps,
+		"Census": censusTracts
 	}
 }
 
 var map = L.map('map', {
 	layers: [road]
 }).setView( [45.416667, -75.7], 15);
+
+map.scrollWheelZoom.disable()
 
 L.control.groupedLayers(baseMaps, groupedOverlays).addTo(map);
 
@@ -556,53 +761,3 @@ var fullMap = function(){
 }
 
 
-// L.Control.Contract = L.Control.extend({
-// 	_active: false,
-// 	options: {
-// 		position: "topleft",
-// 		modal: true,
-// 		className: 'leaflet-expand-icon collapse',
-// 		title: "shrink map"
-// 	},
-// 	onAdd: function(map){
-// 		// console.log(map)
-// 		this._map = map;
-// 		this._container = L.DomUtil.create('div', 'leaflet-zoom-box-control leaflet-bar');
-// 		this._container.title = this.options.title;
-
-// 		var link = L.DomUtil.create('a', this.options.className, this._container);
-// 		link.href="#";
-
-// 		L.DomEvent
-// 			.on(this._container, 'click', function(){
-
-// 					if (this._active){
-// 						this._active = false;
-// 						fullMap();
-// 						// L.DomUtil.removeClass(this._container, 'expand')
-// 						// L.DomUtil.addClass(this._container, 'collapse')
-// 						map.invalidateSize();
-// 					} else{
-// 						halfMap();
-// 						this._active = true;
-// 						L.DomUtil.removeClass(this._container, 'collapse')
-// 						L.DomUtil.addClass(this._container, 'expand')
-// 						map.invalidateSize();
-// 					}
-// 				}, this);
-
-// 		return this._container;
-// 	},
-// 	activate: function(){
-// 		this._active = false
-// 		L.DomUtil.removeClass(this._container, 'expand')
-// 		L.DomUtil.addClass(this._container, 'collapse')
-// 		map.invalidateSize();
-// 	}
-// })
-
-// L.Control.contract = function(options){
-// 	return new L.Control.Contract(options);
-// }
-
-// L.Control.contract().addTo(map);

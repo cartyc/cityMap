@@ -12,18 +12,25 @@
 
 	<title>Property Search</title>
 
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.3/css/bootstrap.min.css" integrity="	sha384-MIwDKRSSImVFAZCVLtU0LMDdON6KVCrZHyVQQj6e8wIEJkW4tvwqXrbMIya1vriY" crossorigin="anonymous">
+	{# jquery #}
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js" integrity="sha384-THPy051/pYDQGanwU6poAc/hOdQxjnOEXzbT+OuUAFqNqFjL+4IGLBgCJC3ZOShY" crossorigin="anonymous"></script>
 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.2.0/js/tether.min.js" integrity="sha384-Plbmg8JY28KFelvJVai01l8WyZzrYWG825m+cZ0eDDS1f7d/js6ikvy1+X+guPIB" crossorigin="anonymous"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.3/js/bootstrap.min.js" integrity="sha384-ux8v3A6CPtOTqOzMKiuo3d/DomGaaClxFYdCu2HPMBEkf6x2xiDyJ7gkXU0MWwaD" crossorigin="anonymous"></script>
+	{# bootstrap #}
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+
+
+	{# FontAwesome #}
 	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
 
 	<!-- Leaftlet -->
 	<!-- Load Leaflet from CDN-->
-	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
-	<script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
+	<script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
 
 	<!-- Load Esri Leaflet from CDN -->
 	<script src="https://cdn.jsdelivr.net/leaflet.esri/2.0.0/esri-leaflet.js"></script>
@@ -53,7 +60,8 @@
 	{# Grouped layers #}
 	<link rel="stylesheet" href="{% static "css/leaflet.groupedlayercontrol.min.css" %}">
 	<script src='{% static "js/leaflet.groupedlayercontrol.min.js" %}'></script>
-<body>
+	
+	<body>
 	
 	<nav class="navbar navbar-full navbar-dark bg-faded" style="background-color: #083D77">
 		<a href="" class="navbar-brand">
@@ -156,61 +164,7 @@
 			return results
 		}
 
-		function propertyModal(id){
-
-			// Create Property Detail PopUp from select result
-
-			var url = "http://maps.ottawa.ca/arcgis/rest/services/Property_Parcels/MapServer/0/query?where=OBJECTID%3D" +id +"&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=FULLADDR%2C+POINTTYPE%2C+WARD%2C+OBJECTID&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=pjson"
-
-
-			property = query(url);
-			point = property[0].geometry
-
-			ward = wardLookUp(point);
-			// hospitals = localHospitals(point);
-
-			var zoning = zoningLookUp(property[0].geometry.x, property[0].geometry.y ),
-			pin = pinGeoLookUp(property[0].geometry.x, property[0].geometry.y),
-			schoolDistrict = "School District",
-			trees = propertyTrees(pin[0].geometry),
-			neighbourhood = neighbourhoodLookUp(point);
-
-			var treeNames = []
-			if (trees){
-				for (var i = 0; i < trees.length; i++){
-					treeNames.push(trees[i].attributes.SPECIES);
-				}
-			}
-
-			// Change Title and clear body
-			$(".modal-title").html(property[0].attributes.FULLADDR + " <small class='text-muted'>" + neighbourhood[0].attributes.NAMES + "</small>");
-			$(".modal-body").empty();
-
-			// for ( var i = 0; i < hospitals.length; i++){
-			// 	var hospital = hospitals[i].attributes.NAME;
-			// 	$(".modal-body").append("<p>" + hospital + "</p>");
-			// }
-
-			// Put Results of search into body
-			var body = "\
-			<div class='row'>\
-				<div class='col-md-4'>Parcel Area</div><div class='col-md-8'>"+ pin[0].attributes.Shape_Area.toLocaleString() + " m2</div>\
-			</div>\
-			<div class='row'>\
-				<div class='col-md-4'>Zoning</div><div class='col-md-8'>"+ zoning.ZONE_CODE + " <a href='http://www.ottawa.ca" + zoning.URL + "' target='_blank'>Reference</a></div>\
-			</div>\
-			<div class='row'>\
-				<div class='col-md-4'>School District</div><div class='col-md-8'>"+ schoolDistrict + "</div>\
-			</div>\
-			<div class='row'>\
-				<div class='col-md-4'>Tree's On Property</div><div class='col-md-8'>"+ treeNames + "</div>\
-			</div>"
-
-			$(".modal-body").append(body);
-
-			$('#property-data').modal('toggle')
-
-		}
+		
 
 	</script>
 
