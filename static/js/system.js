@@ -337,7 +337,7 @@ developmentApps = L.esri.featureLayer({
 	}
 }),
 censusTracts = L.esri.featureLayer({
-	url: "http://maps.ottawa.ca/arcgis/rest/services/AdministrativeAreas/MapServer/4"
+	url: "https://maps.ottawa.ca/arcgis/rest/services/AdministrativeAreas/MapServer/4"
 })
 /////////////////////////////////////
 // PopUps
@@ -506,7 +506,7 @@ var makeChart = function(geo_code, ctname){
 	// var ctx = document.getElementsByClassName("leaflet-popup-content")[0],
 	topic = 'Age characteristics'
 
-    var url = "http://localhost/api/census-by-tract/?geo_code=" + geo_code + "&topic=" + topic,
+    var url = "https://appraiserpro.chriscarty.com/api/census-by-tract/?geo_code=" + geo_code + "&topic=" + topic,
     chart,
     cChart;
 
