@@ -732,7 +732,7 @@ function plotResults(markers){
    		marker = L.marker(latlng);
    		 marker.bindPopup(
             "<div class='row'><div class='col-md-12'><h4>" + markers[i]["fullAddress"] +"</h4></div></div><div class='row'><table class='table'><tr></tr>\
-            <tr><td>Zoning</td><td><a href='http://www.ottawa.ca/" + markers[i]["zoningLink"] +"' target='_blank'>" +markers[i]["zoning"] + "</a></td></tr>\
+            <tr><td>Zoning</td><td><a href='http://www.ottawa.ca" + markers[i]["zoningLink"] +"' target='_blank'>" +markers[i]["zoning"] + "</a></td></tr>\
             <tr></tr>\
             </table></div>", markers[i]);
 
